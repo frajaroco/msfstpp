@@ -53,8 +53,8 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
     ds <- seq(0, maxd, len=20)
     ds <- sort(ds)
   }
-  if(ds[1]==0){ds <- ds[-1]
-  }
+#  if(ds[1]==0){ds <- ds[-1]
+#  }
   
   kernel <- c(ks=ks,hs=hs)
   
@@ -141,14 +141,14 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
    ekmmr <- kmmrout[[17]]
   }
   
-  dsf <- rep(0,nds)
-  dsf[2:nds] <- ds[1:(nds-1)]
-  ds <- dsf
+  #dsf <- rep(0,nds)
+  #dsf[2:nds] <- ds[1:(nds-1)]
+  #ds <- dsf
   
-  kmmrf <- rep(0,nds)
-  kmmrf[2:nds] <- ekmmr[1:(nds-1)]
-  kmmrf[1] <- (sum(ptst^2)/(mummr^2))/npt
-  ekmmr <- kmmrf
+  #kmmrf <- rep(0,nds)
+  #kmmrf[2:nds] <- ekmmr[1:(nds-1)]
+  #kmmrf[1] <- (sum(ptst^2)/(mummr^2))/npt
+  #ekmmr <- kmmrf
   
   invisible(return(list(ekmmr=ekmmr,ds=ds,kernel=kernel)))
 }
