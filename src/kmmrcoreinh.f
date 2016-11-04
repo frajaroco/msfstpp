@@ -11,7 +11,7 @@ C
 
       integer i,j,iu,n,ns,ks,edg
       double precision inhwij,inhvij,hs,kerns,kmrminh,kmrninh,kmmr
-      double precision hij,mij,xi,yi,ti,pi,two,wrs,wts,wbi,x,y,txy
+      double precision hij,mij,xi,yi,ti,two,wrs,wts,wbi,x,y,txy
       double precision wbimod,wss,mummr,slambda
       dimension x(n),y(n),txy(n),s(ns),kmrminh(ns),kmrninh(ns)
       dimension wrs(n,n),wts(n,n),wbi(n,ns),wbimod(n,ns),wss(ns)
@@ -21,7 +21,6 @@ C
        kmrninh=0d0
       
           two=2d0
-          pi=3.141592654d0
 
       do iu=1,ns
       do i=1,n
@@ -42,46 +41,43 @@ C
       if (kerns.ne.0d0) then
 C    none
       if (edg(1).eq.1) then
-       inhwij=(mij*kerns)/(two*pi*s(iu)*(slambda(i)*slambda(j)))
-       inhvij=kerns/(two*pi*s(iu)*(slambda(i)*slambda(j)))
+       inhwij=(mij*kerns)/(slambda(i)*slambda(j))
+       inhvij=kerns/(slambda(i)*slambda(j))
        kmrminh(iu)=kmrminh(iu)+inhwij
        kmrninh(iu)=kmrninh(iu)+inhvij  
       end if                  
 C    isotropic
       if (edg(2).eq.1) then                  
-      inhwij=(mij*kerns*wrs(i,j))/(two*pi*s(iu)*(slambda(i)*slambda(j)))
-      inhvij=(kerns*wrs(i,j))/(two*pi*s(iu)*(slambda(i)*slambda(j)))
+      inhwij=(mij*kerns*wrs(i,j))/(slambda(i)*slambda(j))
+      inhvij=(kerns*wrs(i,j))/(slambda(i)*slambda(j))
       kmrminh(iu)=kmrminh(iu)+inhwij
       kmrninh(iu)=kmrninh(iu)+inhvij
       end if
 C    border
       if (edg(3).eq.1) then                  
-      inhwij=(mij*kerns*wbi(i,iu))/(two*pi*s(iu)*(slambda(i)*
-     +  slambda(j)))
-      inhvij=(kerns*wbi(i,iu))/(two*pi*s(iu)*(slambda(i)*slambda(j)))
+      inhwij=(mij*kerns*wbi(i,iu))/(slambda(i)*slambda(j))
+      inhvij=(kerns*wbi(i,iu))/(slambda(i)*slambda(j))
       kmrminh(iu)=kmrminh(iu)+inhwij
       kmrninh(iu)=kmrninh(iu)+inhvij
       end if
 C    modified.border
       if (edg(4).eq.1) then
-      inhwij=(mij*kerns*wbimod(i,iu))/(two*pi*s(iu)*(slambda(i)*
-     +  slambda(j)))
-      inhvij=(kerns*wbimod(i,iu))/(two*pi*s(iu)*(slambda(i)*slambda(j)))
+      inhwij=(mij*kerns*wbimod(i,iu))/(slambda(i)*slambda(j))
+      inhvij=(kerns*wbimod(i,iu))/(slambda(i)*slambda(j))
       kmrminh(iu)=kmrminh(iu)+inhwij
       kmrninh(iu)=kmrninh(iu)+inhvij 
       end if                  
 C    translate
       if (edg(5).eq.1) then
-      inhwij=(mij*kerns*wts(i,j))/(two*pi*s(iu)*(slambda(i)*
-     +  slambda(j)))
-      inhvij=(kerns*wts(i,j))/(two*pi*s(iu)*(slambda(i)*slambda(j)))
+      inhwij=(mij*kerns*wts(i,j))/(slambda(i)*slambda(j))
+      inhvij=(kerns*wts(i,j))/(slambda(i)*slambda(j))
       kmrminh(iu)=kmrminh(iu)+inhwij
       kmrninh(iu)=kmrninh(iu)+inhvij
       end if
 C    setcovf         
       if (edg(6).eq.1) then
-      inhwij=(mij*kerns*wss(iu))/(two*pi*s(iu)*(slambda(i)*slambda(j)))
-      inhvij=(kerns*wss(iu))/(two*pi*s(iu)*(slambda(i)*slambda(j)))
+      inhwij=(mij*kerns*wss(iu))/(slambda(i)*slambda(j))
+      inhvij=(kerns*wss(iu))/(slambda(i)*slambda(j))
       kmrminh(iu)=kmrminh(iu)+inhwij
       kmrninh(iu)=kmrninh(iu)+inhvij
       end if
