@@ -150,5 +150,5 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
   kmmrf[1] <- sum((ptst^2)/(mummr^2))/npt
   ekmmr <- kmmrf
   
-  invisible(return(list(ekmmr=ekmmr,s.region=s.region,ds=ds,kernel=kernel)))
+  invisible(return(list(ekmmr=ekmmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
 }

@@ -19,7 +19,7 @@ kmmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simpli
   \item{ks}{A kernel function for the spatial distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{hs}{A bandwidth of the kernel function \code{ks}.}
   \item{correction}{A character vector specifying the edge-correction(s) to be applied among "isotropic","border", "modified.border", "translate", "setcovf" and "none". The default is "none".}
-  \item{approach}{A character vector specifying the approach to use for the estimation to be applied among "simplified" or "standardised".}
+  \item{approach}{A character vector specifying the approach to use for the estimation to be applied among "simplified" or "standardised". If approach is missing, "simplified" is considered by default.}
 %%     ~~Describe \code{x} here~~
 }
 \details{By default, this command calculates an estimate of Stoyan's mark correlation k_[mm](r) for the point pattern.
