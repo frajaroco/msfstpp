@@ -36,6 +36,9 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
     }
   
   if (missing(s.region)){
+    if (appro2[1]==1){
+    s.region <- sbox(xyt[, 1:2], xfrac = 0.01, yfrac = 0.01)
+    } else{
     x <- xyt[,1]
     y <- xyt[,2]
     W <- ripras(x,y)
@@ -43,6 +46,7 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
     X <- poly[[1]]$x
     Y <- poly[[1]]$y
     s.region <- cbind(X,Y)
+    }
   }
   
   bsw <- owin(poly=list(x=s.region[,1],y=s.region[,2]))
@@ -78,6 +82,17 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
                         ,as.double(hs),as.double(mummr),(ekmmr),PACKAGE="msfstpp")
     
     ekmmr <- kmmrout[[10]]
+   
+    dsf <- rep(0,nds)
+    dsf[2:nds] <- ds[1:(nds-1)]
+    ds <- dsf
+    
+    kmmrf <- rep(0,nds)
+    kmmrf[2:nds] <- ekmmr[1:(nds-1)]
+    kmmrf[1] <- sum((ptst^2)/(mummr^2))/npt
+    ekmmr <- kmmrf
+    
+    invisible(return(list(ekmmr=ekmmr,ds=ds,kernel=kernel,s.region=s.region)))
   } else {
     
   if(missing(s.lambda)){
@@ -139,16 +154,16 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
                      as.double(mummr),(ekmmr),PACKAGE="msfstpp")
   
    ekmmr <- kmmrout[[17]]
-  }
   
-  dsf <- rep(0,nds)
-  dsf[2:nds] <- ds[1:(nds-1)]
-  ds <- dsf
-  
-  kmmrf <- rep(0,nds)
-  kmmrf[2:nds] <- ekmmr[1:(nds-1)]
-  kmmrf[1] <- sum((ptst^2)/(mummr^2))/npt
-  ekmmr <- kmmrf
-  
-  invisible(return(list(ekmmr=ekmmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+   dsf <- rep(0,nds)
+   dsf[2:nds] <- ds[1:(nds-1)]
+   ds <- dsf
+   
+   kmmrf <- rep(0,nds)
+   kmmrf[2:nds] <- ekmmr[1:(nds-1)]
+   kmmrf[1] <- sum((ptst^2)/(mummr^2))/npt
+   ekmmr <- kmmrf
+   
+   invisible(return(list(ekmmr=ekmmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+   }
 }
