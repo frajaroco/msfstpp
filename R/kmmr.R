@@ -129,8 +129,7 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
   #  correction=="border" or "modified border"
   
   if(any(correction=="border")|any(correction=="modified.border")){
-    bi=bdist.points(pxy)
-    
+    bi <- bdist.points(pxy)
     for(i in 1:nds) { 
       wbi[,i] <- (bi>ds[i])/sum((bi>ds[i])/s.lambda)
       wbimod[,i] <- (bi>ds[i])/eroded.areas(bsw,ds[i])
