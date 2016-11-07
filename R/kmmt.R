@@ -136,7 +136,7 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
                         as.double(wbit),as.double(wbimodt),as.double(wst),as.integer(correc2),
                         as.double(mummt),(ekmmt),PACKAGE="msfstpp")
     
-    ekmmt <- kmmtout[[17]]
+    ekmmt <- kmmtout[[16]]
     
     dtf <- rep(0,ndt)
     dtf[2:ndt] <- dt[1:(ndt-1)]
