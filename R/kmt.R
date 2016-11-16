@@ -1,4 +1,4 @@
-kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
+kmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
   
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
@@ -36,9 +36,9 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
   }
   
   if (missing(t.region)){
-      tr <- range(xyt[,3],na.rm=TRUE)
-      tw <- diff(tr)
-      t.region <- c(tr[1]-0.01*tw,tr[2]+0.01*tw)
+    tr <- range(xyt[,3],na.rm=TRUE)
+    tw <- diff(tr)
+    t.region <- c(tr[1]-0.01*tw,tr[2]+0.01*tw)
   }
   
   bsupt <- max(t.region)
@@ -62,27 +62,27 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
   npt <- length(ptsx)
   ndt <- length(dt)
   snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
-  mummt <- mean(snorm)
-  ekmmt <- rep(0,ndt)
+  mumt <- mean(snorm)
+  ekmt <- rep(0,ndt)
   
-  storage.mode(ekmmt) <- "double"
+  storage.mode(ekmt) <- "double"
   
   if (appro2[1]==1){
-    kmmtout <- .Fortran("kmmtcore",as.double(snorm),as.double(ptst),as.integer(npt),as.double(dt),
-                        as.integer(ndt),as.integer(ker2),as.double(ht),(ekmmt),PACKAGE="msfstpp")
+    kmtout <- .Fortran("kmtcore",as.double(snorm),as.double(ptst),as.integer(npt),as.double(dt),
+                        as.integer(ndt),as.integer(ker2),as.double(ht),(ekmt),PACKAGE="msfstpp")
     
-    ekmmt <- kmmtout[[8]]/(mummt^2)
+    ekmt <- kmtout[[8]]/mumt
     
     dtf <- rep(0,ndt+1)
     dtf[2:(ndt+1)] <- dt
     dt <- dtf
     
-    kmmtf <- rep(0,ndt+1)
-    kmmtf[2:(ndt+1)] <- ekmmt
-    kmmtf[1] <- sum((snorm^2)/(mummt^2))/npt
-    ekmmt <- kmmtf
+    kmtf <- rep(0,ndt+1)
+    kmtf[2:(ndt+1)] <- ekmt
+    kmtf[1] <- 1
+    ekmt <- kmtf
     
-    invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(ekmt=ekmt,dt=dt,kernel=kernel,t.region=t.region)))
   } else {
     
     if(missing(t.lambda)){
@@ -106,13 +106,13 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
     if(correction=="isotropic"){
       wist <- tedgeRipley(ptst,binft,bsupt)
       wrt <- 1/wist
-      }
+    }
     
     # correction="translate"
     if(correction=="translate"){
       wtrat <- tedgeTrans(ptst,t.region)
       wtt <- 1/wtrat
-      }
+    }
     
     #  correction=="border" or "modified border"
     
@@ -130,95 +130,25 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
     if(correction=="setcovf"){
       wsett <- tsetcovf(dt,ndt,bsupt-binft)
       wst <- 1/wsett
-      }
+    }
     
-    kmmtout <- .Fortran("kmmtcoreinh",as.double(snorm),as.double(ptst),as.integer(npt),
+    kmtout <- .Fortran("kmtcoreinh",as.double(snorm),as.double(ptst),as.integer(npt),
                         as.double(dt),as.integer(ndt),as.double(t.lambda),as.integer(ker2),
                         as.double(ht),as.double(wrt),as.double(wtt),as.double(wbit),
-                        as.double(wbimodt),as.double(wst),as.integer(correc2),(ekmmt),
+                        as.double(wbimodt),as.double(wst),as.integer(correc2),(ekmt),
                         PACKAGE="msfstpp")
     
-    ekmmt <- kmmtout[[15]]/(mummt^2)
+    ekmt <- kmtout[[15]]/mumt
     
     dtf <- rep(0,ndt+1)
     dtf[2:(ndt+1)] <- dt
     dt <- dtf
     
-    kmmtf <- rep(0,ndt+1)
-    kmmtf[2:(ndt+1)] <- ekmmt
-    kmmtf[1] <- sum((snorm^2)/(mummt^2))/npt
-    ekmmt <- kmmtf
+    kmtf <- rep(0,ndt+1)
+    kmtf[2:(ndt+1)] <- ekmt
+    kmtf[1] <- 1
+    ekmt <- kmtf
     
-    invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(ekmt=ekmt,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
   }
-}
-
-tedgeRipley <- function(times,binft,bsupt){
-  ntimes <- length(times)
-  wrt <- matrix(1,ncol=ntimes,nrow=ntimes)
-  
-  for(i in 1:ntimes){
-    ti <- times[i]
-    for(j in 1:ntimes){
-      tij <- abs(ti-times[j])
-      if (i!=j){
-        bsup <- ti+tij
-        binf <- ti-tij
-        if ((bsup<=bsupt)&(binf>=binft)){
-          wrt[i,j] <- 1}
-        else {
-          wrt[i,j] <- 2
-        }
-      }
-    }
-  }
-  invisible(return(wrt))
-}
-
-tedgeTrans <- function(times,t.region){
-  if (missing(t.region)){
-    t.region <- range(times)
-    }
-  
-  ntimes <- length(times)
-  a <- diff(range(t.region))
-  wtt <- matrix(a,ncol=ntimes,nrow=ntimes)
-  
-  for(i in 1:ntimes){
-    for(j in 1:ntimes){
-      if (i!=j){
-        b <- a-abs(times[i]-times[j])
-        wtt[i,j] <- a/b
-      }
-    }
-  }
-  invisible(return(wtt))
-}
-
-tsetcovf <- function(times,ntimes,longit){
-  wst <- rep(0,ntimes)
-  for (i in 1:ntimes){
-    wst[i] <- longit-times[i]}
-  invisible(return(wst=wst))
-}
-
-.bdist.times=function(times,t.region){
-  if (missing(t.region)){
-    t.region <- range(times)
-  }
-  ntimes <- length(times)
-  a <- min(t.region)
-  b <- max(t.region)
-  
-  bj <- NULL
-  for(j in 1:ntimes)
-    bj <- c(bj,min(c(abs(times[j]-a),abs(times[j]-b))))
-  
-  invisible(return(bj))
-}
-
-.eroded.areat=function(t.region,dist){
-  a <- diff(range(t.region))
-  b <- a-dist
-  invisible(return(b))
 }

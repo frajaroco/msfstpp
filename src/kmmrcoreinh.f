@@ -5,14 +5,14 @@ C     estimator of the standardized spatial mark correlation function.
 C
 
       subroutine kmmrcoreinh(x,y,txy,n,s,ns,slambda,ks,hs,wrs,wts,
-     +     wbi,wbimod,wss,edg,mummr,kmmr)
+     +     wbi,wbimod,wss,edg,kmmr)
      
       implicit real*8(a-h,o-z)
 
       integer i,j,iu,n,ns,ks,edg
       double precision inhwij,inhvij,hs,kerns,kmrminh,kmrninh,kmmr
       double precision hij,mij,xi,yi,ti,two,wrs,wts,wbi,x,y,txy
-      double precision wbimod,wss,mummr,slambda
+      double precision wbimod,wss,slambda
       dimension x(n),y(n),txy(n),s(ns),kmrminh(ns),kmrninh(ns)
       dimension wrs(n,n),wts(n,n),wbi(n,ns),wbimod(n,ns),wss(ns)
       dimension ks(3),edg(6),slambda(n),kmmr(ns)
@@ -85,7 +85,7 @@ C    setcovf
       end if
        end do
        end do
-       kmmr(iu)=kmrminh(iu)/((mummr**two)*kmrninh(iu))   
+       kmmr(iu)=kmrminh(iu)/kmrninh(iu)
        end do
       
         return

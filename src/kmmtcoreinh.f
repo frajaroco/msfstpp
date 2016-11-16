@@ -5,22 +5,20 @@ C     estimator of the standardized temporal mark correlation function.
 C
 
       subroutine kmmtcoreinh(snorm,txy,n,t,nt,tlambda,kt,ht,wrt,wtt,
-     +     wbit,wbimodt,wst,edg,mummt,kmmt)
+     +     wbit,wbimodt,wst,edg,kmmt)
      
       implicit real*8(a-h,o-z)
 
       integer i,j,iv,n,nt,kt,edg
       double precision inhwij,inhvij,ht,kernt,kmtminh,kmtninh,kmmt
-      double precision tij,mij,snormi,ti,two,wrt,wtt,wbit,txy,snorm
-      double precision wbimodt,wst,mummt,tlambda
+      double precision tij,mij,snormi,ti,wrt,wtt,wbit,txy,snorm
+      double precision wbimodt,wst,tlambda
       dimension snorm(n),txy(n),t(nt),kmtminh(nt),kmtninh(nt)
       dimension wrt(n,n),wtt(n,n),wbit(n,nt),wbimodt(n,nt),wst(nt)
       dimension kt(3),edg(6),tlambda(n),kmmt(nt)
        
        kmtminh=0d0
        kmtninh=0d0
-      
-          two=2d0
 
       do iv=1,nt
       do i=1,n
@@ -84,7 +82,7 @@ C    setcovf
       end if
        end do
        end do
-       kmmt(iv)=kmtminh(iv)/((mummt**two)*kmtninh(iv))   
+       kmmt(iv)=kmtminh(iv)/kmtninh(iv)
        end do
       
         return

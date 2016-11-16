@@ -1,17 +1,17 @@
 C     Francisco J. Rodriguez-Cortes, November 2016
 C
 C     This code provides a non-parametric kernel based estimator of the
-C     temporal mark correlation function.
+C     temporal t-mark function.
 C
 
-       subroutine kmmtcore(snorm,txy,n,t,nt,kt,ht,kmmt)
+       subroutine kmtcore(snorm,txy,n,t,nt,kt,ht,kmt)
 
        implicit real*8(a-h,o-z)
 
        integer i,j,iv,n,nt,kt
-       double precision wij,vij,ht,kernt,ktm,ktn,kmmt,snorm,txy
+       double precision wij,vij,ht,kernt,ktm,ktn,kmt,snorm,txy
        double precision tij,mij,snormi,ti
-       dimension snorm(n),txy(n),t(nt),ktm(nt),ktn(nt),kmmt(nt),kt(3)
+       dimension snorm(n),txy(n),t(nt),ktm(nt),ktn(nt),kmt(nt),kt(3)
 
        ktm=0d0
        ktn=0d0
@@ -23,7 +23,7 @@ C
           do j=1,n
            if (j.ne.i) then
             tij=abs(ti-txy(j))
-            mij=snormi*snorm(j)
+            mij=snormi
               if (kt(1).eq.1) then
                kernt=boxkernel((t(iv)-tij)/ht,ht)
                 else if (kt(2).eq.1) then
@@ -40,7 +40,7 @@ C
            end if
           end do
           end do
-            kmmt(iv)=ktm(iv)/ktn(iv)
+            kmt(iv)=ktm(iv)/ktn(iv)
           end do
 
         return

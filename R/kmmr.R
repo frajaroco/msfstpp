@@ -54,7 +54,7 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
   if (missing(ds)){
     rect <- as.rectangle(bsw)
     maxd <- min(diff(rect$xrange),diff(rect$yrange))/4
-    ds <- seq(0, maxd, len=20)
+    ds <- seq(hs, maxd,len=100)[-1]
     ds <- sort(ds)
   }
   if(ds[1]==0){ds <- ds[-1]
@@ -79,16 +79,16 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
   if (appro2[1]==1){
     kmmrout <- .Fortran("kmmrcore",as.double(ptsx),as.double(ptsy),as.double(ptst),
                         as.integer(npt),as.double(ds),as.integer(nds),as.integer(ker2)
-                        ,as.double(hs),as.double(mummr),(ekmmr),PACKAGE="msfstpp")
+                        ,as.double(hs),(ekmmr),PACKAGE="msfstpp")
     
-    ekmmr <- kmmrout[[10]]
+    ekmmr <- kmmrout[[9]]/(mummr^2)
    
-    dsf <- rep(0,nds)
-    dsf[2:nds] <- ds[1:(nds-1)]
+    dsf <- rep(0,nds+1)
+    dsf[2:(nds+1)] <- ds
     ds <- dsf
     
-    kmmrf <- rep(0,nds)
-    kmmrf[2:nds] <- ekmmr[1:(nds-1)]
+    kmmrf <- rep(0,nds+1)
+    kmmrf[2:(nds+1)] <- ekmmr
     kmmrf[1] <- sum((ptst^2)/(mummr^2))/npt
     ekmmr <- kmmrf
     
@@ -150,16 +150,16 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
                      as.integer(npt),as.double(ds),as.integer(nds),as.double(s.lambda),
                      as.integer(ker2),as.double(hs),as.double(wrs),as.double(wts),
                      as.double(wbi),as.double(wbimod),as.double(wss),as.integer(correc2),
-                     as.double(mummr),(ekmmr),PACKAGE="msfstpp")
+                     (ekmmr),PACKAGE="msfstpp")
   
-   ekmmr <- kmmrout[[17]]
+   ekmmr <- kmmrout[[16]]/(mummr^2)
   
-   dsf <- rep(0,nds)
-   dsf[2:nds] <- ds[1:(nds-1)]
+   dsf <- rep(0,nds+1)
+   dsf[2:(nds+1)] <- ds
    ds <- dsf
    
-   kmmrf <- rep(0,nds)
-   kmmrf[2:nds] <- ekmmr[1:(nds-1)]
+   kmmrf <- rep(0,nds+1)
+   kmmrf[2:(nds+1)] <- ekmmr
    kmmrf[1] <- sum((ptst^2)/(mummr^2))/npt
    ekmmr <- kmmrf
    
