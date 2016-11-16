@@ -4,13 +4,13 @@ C     This code provides a non-parametric kernel based estimator of the
 C     spatial mark correlation function.
 C
 
-       subroutine kmmrcore(x,y,txy,n,s,ns,ks,hs,mummr,kmmr)
+       subroutine kmmrcore(x,y,txy,n,s,ns,ks,hs,kmmr)
 
        implicit real*8(a-h,o-z)
 
        integer i,j,iu,n,ns,ks
        double precision wij,vij,hs,kerns,krm,krn,kmmr,x,y,txy
-       double precision hij,mij,xi,yi,ti,two,mummr
+       double precision hij,mij,xi,yi,ti,two
        dimension x(n),y(n),txy(n),s(ns),krm(ns),krn(ns),kmmr(ns),ks(3)
 
        krm=0d0
@@ -43,7 +43,7 @@ C
            end if
           end do
           end do
-            kmmr(iu)=krm(iu)/((mummr**two)*krn(iu))
+            kmmr(iu)=krm(iu)/krn(iu)
           end do
 
         return
