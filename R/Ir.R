@@ -72,7 +72,7 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
   area <- area(bsw)
   pert <- perimeter(bsw)
   mumr <- mean(ptst)
-  varmr <- var(ptst)
+  varmr <-  ((npt-1)/npt)*var(ptst)
   eImr <- rep(0,nds)
   
   storage.mode(eImr) <- "double"
@@ -162,7 +162,7 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
     Imrf <- rep(0,nds+1)
     Imrf[2:(nds+1)] <- eImr
     Imrf[1] <- 1
-    Imr <- Imrf
+    eImr <- Imrf
     
     invisible(return(list(eImr=eImr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
   }
