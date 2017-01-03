@@ -13,7 +13,7 @@ Depends:
     spatstat,
     stpp,
     stats
-Description: Basic toolkit for the exploration and analysis of the spatio-temporal point patterns through the mark summary functions
+Description: Basic toolkit for the exploration and analysis of the spatio-temporal point patterns through mark summary functions.
 License: GPL-3
 LazyLoad: yes
 NeedsCompilation: yes

@@ -30,6 +30,12 @@ It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approa
   ker2 <- rep(0,3)
   ker2[ik] <- 1
   
+  dup <- duplicated(data.frame(xyt[,1],xyt[,2],xyt[,3]),fromLast = TRUE)[1]
+  if (dup == TRUE){
+    messnbd <- paste("spatio-temporal data contain duplicated points")
+    warning(messnbd,call.=FALSE)
+  }
+  
   if (missing(ht)){
     d <- dist(xyt[,3])
     ht <- dpik(d,kernel=kt,range.x=c(min(d),max(d)))
@@ -74,17 +80,9 @@ It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approa
                        PACKAGE="msfstpp")
     
     eImt <- Imtout[[9]]/varmt
+    Imt0 <- 1
     
-    dtf <- rep(0,ndt+1)
-    dtf[2:(ndt+1)] <- dt
-    dt <- dtf
-    
-    Imtf <- rep(0,ndt+1)
-    Imtf[2:(ndt+1)] <- eImt
-    Imtf[1] <- 1
-    eImt <- Imtf
-    
-    invisible(return(list(eImt=eImt,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(eImt=eImt,Imt0=Imt0,dt=dt,kernel=kernel,t.region=t.region)))
   } else {
     
     if(missing(t.lambda)){
@@ -141,16 +139,8 @@ It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approa
                        (eImt),PACKAGE="msfstpp")
     
     eImt <- Imtout[[16]]/varmt
+    Imt0 <- 1
     
-    dtf <- rep(0,ndt+1)
-    dtf[2:(ndt+1)] <- dt
-    dt <- dtf
-    
-    Imtf <- rep(0,ndt+1)
-    Imtf[2:(ndt+1)] <- eImt
-    Imtf[1] <- 1
-    eImt <- Imtf
-    
-    invisible(return(list(eImt=eImt,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(eImt=eImt,Imt0=Imt0,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
   }
 }

@@ -30,6 +30,12 @@ kmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   ker2 <- rep(0,3)
   ker2[ik] <- 1
   
+  dup <- duplicated(data.frame(xyt[,1],xyt[,2],xyt[,3]),fromLast = TRUE)[1]
+  if (dup == TRUE){
+    messnbd <- paste("spatio-temporal data contain duplicated points")
+    warning(messnbd,call.=FALSE)
+  }
+  
   if (missing(hs)){
     d <- dist(xyt[,1:2])
     hs <- dpik(d,kernel=ks,range.x=c(min(d),max(d)))
@@ -82,17 +88,9 @@ kmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                         ,as.double(hs),(ekmr),PACKAGE="msfstpp")
     
     ekmr <- kmrout[[9]]/mumr
+    kmr0 <- 1
     
-    dsf <- rep(0,nds+1)
-    dsf[2:(nds+1)] <- ds
-    ds <- dsf
-    
-    kmrf <- rep(0,nds+1)
-    kmrf[2:(nds+1)] <- ekmr
-    kmrf[1] <- 1
-    ekmr <- kmrf
-    
-    invisible(return(list(ekmr=ekmr,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(ekmr=ekmr,kmr0=kmr0,ds=ds,kernel=kernel,s.region=s.region)))
   } else {
     
     if(missing(s.lambda)){
@@ -110,6 +108,8 @@ kmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     wbi <- array(0,dim=c(npt,nds))
     wbimod <- array(0,dim=c(npt,nds))
     wss <- rep(0,nds)
+    
+    options(warn = -1) 
     
     pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
     
@@ -146,6 +146,8 @@ kmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
       wss <- 1/wss
     }
     
+    options(warn = 0)
+    
     kmrout <- .Fortran("kmrcoreinh",as.double(ptsx),as.double(ptsy),as.double(ptst),
                         as.integer(npt),as.double(ds),as.integer(nds),as.double(s.lambda),
                         as.integer(ker2),as.double(hs),as.double(wrs),as.double(wts),
@@ -153,16 +155,8 @@ kmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                        (ekmr),PACKAGE="msfstpp")
     
     ekmr <- kmrout[[16]]/mumr
+    kmr0 <- 1
     
-    dsf <- rep(0,nds+1)
-    dsf[2:(nds+1)] <- ds
-    ds <- dsf
-    
-    kmrf <- rep(0,nds+1)
-    kmrf[2:(nds+1)] <- ekmr
-    kmrf[1] <- 1
-    ekmr <- kmrf
-    
-    invisible(return(list(ekmr=ekmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+    invisible(return(list(ekmr=ekmr,kmr0=kmr0,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
   }
 }

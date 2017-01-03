@@ -30,6 +30,12 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
   ker2 <- rep(0,3)
   ker2[ik] <- 1
   
+  dup <- duplicated(data.frame(xyt[,1],xyt[,2],xyt[,3]),fromLast = TRUE)[1]
+  if (dup == TRUE){
+    messnbd <- paste("spatio-temporal data contain duplicated points")
+    warning(messnbd,call.=FALSE)
+  }
+  
   if (missing(hs)){
     d <- dist(xyt[,1:2])
     hs <- dpik(d,kernel=ks,range.x=c(min(d),max(d)))
@@ -83,17 +89,9 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
                        ,as.double(hs),as.double(mumr),(eImr),PACKAGE="msfstpp")
     
     eImr <- Imrout[[10]]/varmr
+    Imr0 <- 1
     
-    dsf <- rep(0,nds+1)
-    dsf[2:(nds+1)] <- ds
-    ds <- dsf
-    
-    Imrf <- rep(0,nds+1)
-    Imrf[2:(nds+1)] <- eImr
-    Imrf[1] <- 1
-    eImr <- Imrf
-    
-    invisible(return(list(eImr=eImr,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(eImr=eImr,Imr0=Imr0,ds=ds,kernel=kernel,s.region=s.region)))
   } else {
     
     if(missing(s.lambda)){
@@ -111,6 +109,8 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
     wbi <- array(0,dim=c(npt,nds))
     wbimod <- array(0,dim=c(npt,nds))
     wss <- rep(0,nds)
+    
+    options(warn = -1) 
     
     pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
     
@@ -146,6 +146,8 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
       }
       wss <- 1/wss
     }
+
+    options(warn = 0)
     
     Imrout <- .Fortran("Imrcoreinh",as.double(ptsx),as.double(ptsy),as.double(ptst),
                        as.integer(npt),as.double(ds),as.integer(nds),as.double(s.lambda),
@@ -154,16 +156,8 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
                        as.double(mumr),(eImr),PACKAGE="msfstpp")
     
     eImr <- Imrout[[17]]/varmr
+    Imr0 <- 1
     
-    dsf <- rep(0,nds+1)
-    dsf[2:(nds+1)] <- ds
-    ds <- dsf
-    
-    Imrf <- rep(0,nds+1)
-    Imrf[2:(nds+1)] <- eImr
-    Imrf[1] <- 1
-    eImr <- Imrf
-    
-    invisible(return(list(eImr=eImr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+    invisible(return(list(eImr=eImr,Imr0=Imr0,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
   }
 }

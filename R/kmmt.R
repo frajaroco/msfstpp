@@ -30,6 +30,12 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
   ker2 <- rep(0,3)
   ker2[ik] <- 1
   
+  dup <- duplicated(data.frame(xyt[,1],xyt[,2],xyt[,3]),fromLast = TRUE)[1]
+  if (dup == TRUE){
+    messnbd <- paste("spatio-temporal data contain duplicated points")
+    warning(messnbd,call.=FALSE)
+  }
+  
   if (missing(ht)){
     d <- dist(xyt[,3])
     ht <- dpik(d,kernel=kt,range.x=c(min(d),max(d)))
@@ -72,17 +78,9 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
                         as.integer(ndt),as.integer(ker2),as.double(ht),(ekmmt),PACKAGE="msfstpp")
     
     ekmmt <- kmmtout[[8]]/(mummt^2)
+    kmmt0 <- sum((snorm^2)/(mummt^2))/npt
     
-    dtf <- rep(0,ndt+1)
-    dtf[2:(ndt+1)] <- dt
-    dt <- dtf
-    
-    kmmtf <- rep(0,ndt+1)
-    kmmtf[2:(ndt+1)] <- ekmmt
-    kmmtf[1] <- sum((snorm^2)/(mummt^2))/npt
-    ekmmt <- kmmtf
-    
-    invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(ekmmt=ekmmt,kmmt0=kmmt0,dt=dt,kernel=kernel,t.region=t.region)))
   } else {
     
     if(missing(t.lambda)){
@@ -139,17 +137,9 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
                         PACKAGE="msfstpp")
     
     ekmmt <- kmmtout[[15]]/(mummt^2)
+    kmmt0 <- sum((snorm^2)/(mummt^2))/npt
     
-    dtf <- rep(0,ndt+1)
-    dtf[2:(ndt+1)] <- dt
-    dt <- dtf
-    
-    kmmtf <- rep(0,ndt+1)
-    kmmtf[2:(ndt+1)] <- ekmmt
-    kmmtf[1] <- sum((snorm^2)/(mummt^2))/npt
-    ekmmt <- kmmtf
-    
-    invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(ekmmt=ekmmt,kmmt0=kmmt0,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
   }
 }
 

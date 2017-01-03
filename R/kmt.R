@@ -30,6 +30,12 @@ kmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   ker2 <- rep(0,3)
   ker2[ik] <- 1
   
+  dup <- duplicated(data.frame(xyt[,1],xyt[,2],xyt[,3]),fromLast = TRUE)[1]
+  if (dup == TRUE){
+    messnbd <- paste("spatio-temporal data contain duplicated points")
+    warning(messnbd,call.=FALSE)
+  }
+  
   if (missing(ht)){
     d <- dist(xyt[,3])
     ht <- dpik(d,kernel=kt,range.x=c(min(d),max(d)))
@@ -69,20 +75,13 @@ kmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   
   if (appro2[1]==1){
     kmtout <- .Fortran("kmtcore",as.double(snorm),as.double(ptst),as.integer(npt),as.double(dt),
-                        as.integer(ndt),as.integer(ker2),as.double(ht),(ekmt),PACKAGE="msfstpp")
+                       as.integer(ndt),as.integer(ker2),as.double(ht),(ekmt),PACKAGE="msfstpp")
     
     ekmt <- kmtout[[8]]/mumt
+    kmt0 <- 1
+
     
-    dtf <- rep(0,ndt+1)
-    dtf[2:(ndt+1)] <- dt
-    dt <- dtf
-    
-    kmtf <- rep(0,ndt+1)
-    kmtf[2:(ndt+1)] <- ekmt
-    kmtf[1] <- 1
-    ekmt <- kmtf
-    
-    invisible(return(list(ekmt=ekmt,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(ekmt=ekmt,kmt0=kmt0,dt=dt,kernel=kernel,t.region=t.region)))
   } else {
     
     if(missing(t.lambda)){
@@ -133,22 +132,14 @@ kmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     }
     
     kmtout <- .Fortran("kmtcoreinh",as.double(snorm),as.double(ptst),as.integer(npt),
-                        as.double(dt),as.integer(ndt),as.double(t.lambda),as.integer(ker2),
-                        as.double(ht),as.double(wrt),as.double(wtt),as.double(wbit),
-                        as.double(wbimodt),as.double(wst),as.integer(correc2),(ekmt),
-                        PACKAGE="msfstpp")
+                       as.double(dt),as.integer(ndt),as.double(t.lambda),as.integer(ker2),
+                       as.double(ht),as.double(wrt),as.double(wtt),as.double(wbit),
+                       as.double(wbimodt),as.double(wst),as.integer(correc2),(ekmt),
+                       PACKAGE="msfstpp")
     
     ekmt <- kmtout[[15]]/mumt
+    kmt0 <- 1
     
-    dtf <- rep(0,ndt+1)
-    dtf[2:(ndt+1)] <- dt
-    dt <- dtf
-    
-    kmtf <- rep(0,ndt+1)
-    kmtf[2:(ndt+1)] <- ekmt
-    kmtf[1] <- 1
-    ekmt <- kmtf
-    
-    invisible(return(list(ekmt=ekmt,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(ekmt=ekmt,kmt0=kmt0,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
   }
 }

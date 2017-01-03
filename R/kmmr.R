@@ -30,6 +30,12 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
   ker2 <- rep(0,3)
   ker2[ik] <- 1
   
+  dup <- duplicated(data.frame(xyt[,1],xyt[,2],xyt[,3]),fromLast = TRUE)[1]
+  if (dup == TRUE){
+    messnbd <- paste("spatio-temporal data contain duplicated points")
+    warning(messnbd,call.=FALSE)
+  }
+  
   if (missing(hs)){
     d <- dist(xyt[,1:2])
     hs <- dpik(d,kernel=ks,range.x=c(min(d),max(d)))
@@ -82,17 +88,9 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
                         ,as.double(hs),(ekmmr),PACKAGE="msfstpp")
     
     ekmmr <- kmmrout[[9]]/(mummr^2)
-   
-    dsf <- rep(0,nds+1)
-    dsf[2:(nds+1)] <- ds
-    ds <- dsf
+    kmmr0 <- sum((ptst^2)/(mummr^2))/npt
     
-    kmmrf <- rep(0,nds+1)
-    kmmrf[2:(nds+1)] <- ekmmr
-    kmmrf[1] <- sum((ptst^2)/(mummr^2))/npt
-    ekmmr <- kmmrf
-    
-    invisible(return(list(ekmmr=ekmmr,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(ekmmr=ekmmr,kmmr0=kmmr0,ds=ds,kernel=kernel,s.region=s.region)))
   } else {
     
   if(missing(s.lambda)){
@@ -110,6 +108,8 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
   wbi <- array(0,dim=c(npt,nds))
   wbimod <- array(0,dim=c(npt,nds))
   wss <- rep(0,nds)
+  
+  options(warn = -1) 
   
   pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
 
@@ -144,7 +144,9 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
       wss[i] <- area-((pert*ds[i])/pi)
       }
     wss <- 1/wss
-    }
+  }
+  
+  options(warn = 0)
   
   kmmrout <- .Fortran("kmmrcoreinh",as.double(ptsx),as.double(ptsy),as.double(ptst),
                      as.integer(npt),as.double(ds),as.integer(nds),as.double(s.lambda),
@@ -153,16 +155,8 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
                      (ekmmr),PACKAGE="msfstpp")
   
    ekmmr <- kmmrout[[16]]/(mummr^2)
-  
-   dsf <- rep(0,nds+1)
-   dsf[2:(nds+1)] <- ds
-   ds <- dsf
+   kmmr0 <- sum((ptst^2)/(mummr^2))/npt
    
-   kmmrf <- rep(0,nds+1)
-   kmmrf[2:(nds+1)] <- ekmmr
-   kmmrf[1] <- sum((ptst^2)/(mummr^2))/npt
-   ekmmr <- kmmrf
-   
-   invisible(return(list(ekmmr=ekmmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+   invisible(return(list(ekmmr=ekmmr,kmmr0=kmmr0,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
    }
 }
