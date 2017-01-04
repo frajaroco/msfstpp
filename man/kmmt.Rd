@@ -22,7 +22,7 @@ kmmt(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simpli
   \item{approach}{A character vector specifying the approach to use for the estimation to be applied among "simplified" or "standardised". If approach is missing, "simplified" is considered by default.}
 %%     ~~Describe \code{x} here~~
 }
-\details{By default, this command calculates an estimate of the temporal mark correlation function k_[mm](t) for a spatio-temporal point pattern.
+\details{By default, this command calculates an estimate of the temporal mark correlation function \eqn{k_[mm](t)} for a spatio-temporal point pattern.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{

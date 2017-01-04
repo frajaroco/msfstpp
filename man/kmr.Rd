@@ -22,14 +22,14 @@ kmr(xyt, s.region, s.lambda, ds, ks = "epanech", hs, correction = "none", approa
   \item{approach}{A character vector specifying the approach to use for the estimation to be applied among "simplified" or "standardised". If approach is missing, "simplified" is considered by default.}
 %%     ~~Describe \code{x} here~~
 }
-\details{By default, this command calculates an estimate of the spatial \eqn{r}-mark function k_[m.](r) for a spatio-temporal point pattern.
+\details{By default, this command calculates an estimate of the spatial \eqn{r}-mark function \eqn{k_[m.](r)} for a spatio-temporal point pattern.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
-\item{ekmmr}{A vector containing the values of \eqn{k_[m.](u)} estimated.}
-\item{kmmr0}{A single value of \eqn{k_[m.](0)} estimated at \eqn{u=0}.}
+\item{ekmr}{A vector containing the values of \eqn{k_[m.](u)} estimated.}
+\item{kmr0}{A single value of \eqn{k_[m.](0)} estimated at \eqn{u=0}.}
 \item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \eqn{k_[m.](u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
 \item{s.region}{If \code{s.region} is missing, the Ripley-Rasson estimate of the spatial domain is considered under the parameter \code{approach="standardised"}. The bounding box of \code{xyt[,1:2]} is considered under the parameter \code{approach="simplified"}.}
@@ -80,10 +80,10 @@ out <- kmr(hpp,hs=0.12/sqrt(100))
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
 yl <- c(min(1,out$ekmr,out$kmr0),max(1,out$ekmr,out$kmr0))
-plot(out$ds,out$ekmr,type="l",xlab="r = distance",ylab=expression(k[mm](r)),
+plot(out$ds,out$ekmr,type="l",xlab="r = distance",ylab=expression(k[m.](r)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$ds,rep(1,length(out$ds)),col=11)
-points(0,1,col=3,pch=13,cex=1.5)
+points(0,out$kmr0,col=3,pch=13,cex=1.5)
 
 ## End(Not run)
 

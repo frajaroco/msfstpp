@@ -1,36 +1,36 @@
-\name{kmt}
-\alias{kmt}
+\name{It}
+\alias{It}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Temporal \eqn{t}-mark function
+\title{Temporal Moran's \eqn{I}-statistics
 %%  ~~function to do ... ~~
 }
-\description{Computes an estimator of the temporal \eqn{t}-mark function.
+\description{Computes an estimator of the temporal Moran's \eqn{I}-statistics.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-kmt(xyt, t.region, t.lambda, dt, kt = "epanech", ht, correction = "none", approach = "simplified")
+It(xyt, t.region, t.lambda, dt, kt = "epanech", ht, correction = "none", approach = "simplified")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{t.region}{Vector containing the minimum and maximum values of the time interval.}
   \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}.}
-  \item{dt}{A vector of times \code{v} at which \eqn{k_[m.](v)} is computed.}
+  \item{dt}{A vector of times \code{v} at which \code{It(v)} is computed.}
   \item{kt}{A kernel function for the temporal distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{ht}{A bandwidth of the kernel function \code{kt}.}
-  \item{correction}{A character vector specifying the edge-correction(s) to be applied among "isotropic","border", "modified.border", "translate", "setcovf" and "none". The default is "none".}
-  \item{approach}{A character vector specifying the approach to use for the estimation to be applied among "simplified" or "standardised". If approach is missing, "simplified" is considered by default.}
+  \item{correction}{A character vector specifying the edge-correction(s) to be applied among \code{"isotropic"}, \code{"border"}, \code{"modified.border"}, \code{"translate"}, \code{"setcovf"} and \code{"none"}. The default is "none".}
+  \item{approach}{A character vector specifying the approach to use for the estimation to be applied among "simplified" or \code{"standardised"}. If approach is missing, \code{"simplified"} is considered by default.}
 %%     ~~Describe \code{x} here~~
 }
-\details{By default, this command calculates an estimate of the temporal \eqn{t}-mark function \eqn{k_[m.](t)} for a spatio-temporal point pattern.
+\details{By default, this command calculates an estimate of the temporal Moran's \eqn{I}-statistics \eqn{I(t)} for a spatio-temporal point pattern.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
-\item{ekmt}{A vector containing the values of \eqn{k_[m.](v)} estimated.}
-\item{kmt0}{A single value of \eqn{k_[m.](0)} estimated at \eqn{v=0}.}
-\item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \eqn{k_[m.](v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
+\item{eImt}{A vector containing the values of \eqn{I(v)} estimated.}
+\item{Imt0}{A single value of \eqn{I(0)} estimated at \eqn{v=0}.}
+\item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{It(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
 \item{t.region}{If \code{t.region} is missing, the range of \code{xyt[,3]} is considered.}
 \item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
@@ -74,16 +74,16 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the spatial mark correlation function
-out <- kmt(hpp,ht=0.12/sqrt(100))
+out <- It(hpp,ht=0.12/sqrt(100))
 
 # R plot - Spatial mark correlation function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(1,out$ekmt,out$kmt0),max(1,out$ekmt,out$kmt0))
-plot(out$dt,out$ekmt,type="l",xlab="t = time",ylab=expression(k[m.](t)),
+yl <- c(min(1,out$eImt,out$kmt0),max(1,out$eImt,out$Imt0))
+plot(out$dt,out$eImt,type="l",xlab="t = time",ylab=expression(I(t)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$dt,rep(1,length(out$dt)),col=11)
-points(0,out$kmt0,col=3,pch=13,cex=1.5)
+lines(out$dt,rep(0,length(out$dt)),col=11)
+points(0,out$Imt0,col=3,pch=13,cex=1.5)
 
 ## End(Not run)
 
