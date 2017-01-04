@@ -36,7 +36,6 @@ kmmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simpli
 \item{s.lambda}{If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
 }
 %% ...
-}
 \references{
 %% ~put references to the literature/web site here ~
 Baddeley, A., Rubak, E., Turner, R. (2015). Spatial Point Patterns: Methodology and Applications with R. CRC Press, Boca Raton.

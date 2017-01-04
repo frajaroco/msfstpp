@@ -7,9 +7,7 @@
 \description{Computes an estimator of the temporal \eqn{t}-mark function.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
-\usage{
-kmt(xyt, t.region, t.lambda, dt, kt = "epanech", ht, correction = "none", approach = "simplified")
-}
+\usage{kmt(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified")}
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
@@ -36,7 +34,6 @@ kmt(xyt, t.region, t.lambda, dt, kt = "epanech", ht, correction = "none", approa
 \item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
 }
 %% ...
-}
 \references{
 %% ~put references to the literature/web site here ~
 Baddeley, A., Rubak, E., Turner, R. (2015). Spatial Point Patterns: Methodology and Applications with R. CRC Press, Boca Raton.

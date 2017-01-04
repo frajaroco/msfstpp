@@ -36,7 +36,6 @@ kmmt(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simpli
 \item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
 }
 %% ...
-}
 \references{
 %% ~put references to the literature/web site here ~
 Baddeley, A., Rubak, E., Turner, R. (2015). Spatial Point Patterns: Methodology and Applications with R. CRC Press, Boca Raton.
@@ -79,8 +78,8 @@ out <- kmmt(hpp,ht=0.12/sqrt(100))
 # Temporal mark constant under homogeneous Poisson point processes
 a <- 1
 b <- 1
-kmmtp0 <- (150*a^4*b^4*(a^2+b^2))/(5*a*b^4*log((sqrt(a^2+b^2)+a)/(b))+5*a^4*b*log((sqrt(a^2+b^2)+b)/(a))
-              +2*(a^5-sqrt(a^2+b^2)*(a^4-3*a^2*b^2+b^4)+b^5))^2
+kmmtp0 <- (150*a^4*b^4*(a^2+b^2))/(5*a*b^4*log((sqrt(a^2+b^2)+a)/(b))+
+5*a^4*b*log((sqrt(a^2+b^2)+b)/(a))+2*(a^5-sqrt(a^2+b^2)*(a^4-3*a^2*b^2+b^4)+b^5))^2
 
 # R plot - Temporal mark correlation function
 par(mfrow=c(1,1))

@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-It(xyt, t.region, t.lambda, dt, kt = "epanech", ht, correction = "none", approach = "simplified")
+It(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,7 +36,6 @@ It(xyt, t.region, t.lambda, dt, kt = "epanech", ht, correction = "none", approac
 \item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
 }
 %% ...
-}
 \references{
 %% ~put references to the literature/web site here ~
 Baddeley, A., Rubak, E., Turner, R. (2015). Spatial Point Patterns: Methodology and Applications with R. CRC Press, Boca Raton.
