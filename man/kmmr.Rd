@@ -15,11 +15,11 @@ kmmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simpli
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{s.region}{Two-column matrix specifying polygonal region containing all data locations. }
   \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}.}
-  \item{ds}{A vector of distances \code{u} at which \eqn{k_[mm](u)} is computed.}
+  \item{ds}{A vector of distances \code{u} at which \code{kmmr(u)} is computed.}
   \item{ks}{A kernel function for the spatial distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{hs}{A bandwidth of the kernel function \code{ks}.}
-  \item{correction}{A character vector specifying the edge-correction(s) to be applied among "isotropic","border", "modified.border", "translate", "setcovf" and "none". The default is "none".}
-  \item{approach}{A character vector specifying the approach to use for the estimation to be applied among "simplified" or "standardised". If approach is missing, "simplified" is considered by default.}
+  \item{correction}{A character vector specifying the edge-correction(s) to be applied among \code{"isotropic"}, \code{"border"}, \code{"modified.border"}, \code{"translate"}, \code{"setcovf"} and \code{"none"}. The default is \code{"none"}.}
+  \item{approach}{A character vector specifying the approach to use for the estimation to be applied among "simplified" or \code{"standardised"}. If approach is missing, \code{"simplified"} is considered by default.}
 %%     ~~Describe \code{x} here~~
 }
 \details{By default, this command calculates an estimate of the spatial mark correlation function \eqn{k_[mm](r)} for a spatio-temporal point pattern.
@@ -30,7 +30,7 @@ kmmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simpli
 %%  If it is a LIST, use
 \item{ekmmr}{A vector containing the values of \eqn{k_[mm](u)} estimated.}
 \item{kmmr0}{A single value of \eqn{k_[mm](0)} estimated at \eqn{u=0}.}
-\item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \eqn{k_[mm](u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
+\item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \code{kmmr(u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
 \item{s.region}{If \code{s.region} is missing, the Ripley-Rasson estimate of the spatial domain is considered under the parameter \code{approach="standardised"}. The bounding box of \code{xyt[,1:2]} is considered under the parameter \code{approach="simplified"}.}
 \item{s.lambda}{If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
@@ -67,7 +67,7 @@ Rodriguez-Cortes, F. J.(2015). \code{mvstpp}: Mark Variogram for Spatio-Temporal
 ## Not run:
 #################
 
-# Realisations of the homogeneous Poisson processes
+# A realisation of spatio-temporal homogeneous Poisson point processes
 hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 
 # R plot
