@@ -159,7 +159,7 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                         as.integer(ker2),as.double(hs),as.double(wrs),as.double(wts),
                         as.double(wbi),as.double(wbimod),as.double(wss),as.integer(correc2),
                         (gsps),PACKAGE="msfstpp")
-    gsps <- gspout[[9]]
+    gsps <- gspout[[16]]
     
     dsf <- rep(0,nds+2)
     dsf[3:(nds+2)] <- ds
