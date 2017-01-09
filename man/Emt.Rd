@@ -81,7 +81,7 @@ ete <- ((a^5+b^5-sqrt(a^2+b^2)*(a^4-3*b^2*a^2+b^4))/(15*(a*b)^2)+((b^2*log((a+sq
 # R plot - Temporal mean mark function
 par(mfrow=c(1,1))
 yl <- c(0,max(out$eEmt,ete))
-plot(out$dt,out$eEmt,type="l",xlab="t = time",ylab=expression(E(t)),
+plot(out$dt,out$eEmt,type="l",xlab="t = time",ylab=expression(E[te](t)),
      ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$dt,rep(ete,length(out$dt)),col=11)
 
