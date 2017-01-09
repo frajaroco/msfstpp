@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-gte(xyt, t.region, t.lambda, dt, kt = "epanech", ht, correction = "none", approach = "simplified")
+gte(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

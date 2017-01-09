@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Vmr(xyt, s.region, s.lambda, ds, ks = "epanech", hs, correction = "none", approach = "simplified")
+Vmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplified")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

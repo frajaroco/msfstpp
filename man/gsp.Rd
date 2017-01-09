@@ -8,7 +8,7 @@
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-gsp(xyt, s.region, s.lambda, ds, ks = "epanech", hs, correction = "none", approach = "simplified")
+gsp(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplified")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -153,7 +153,7 @@ Vmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                        as.double(wbi),as.double(wbimod),as.double(wss),as.integer(correc2),
                        as.double(emr),(eVmr),PACKAGE="msfstpp")
     
-    eEmr <- Emrout[[17]]
+    eVmr <- Vmrout[[17]]
     
     invisible(return(list(eVmr=eVmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
   }
