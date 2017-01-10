@@ -154,7 +154,6 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     
     eEmr <- Emrout[[16]]
     
-    
     invisible(return(list(eEmr=eEmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
   }
 }
