@@ -77,8 +77,8 @@ out <- Vmt(hpp,ht=0.12/sqrt(100))
 # Temporal mark constant under homogeneous Poisson point processes
 a <- 1
 b <- 1
-Vmt0 <- (1/6)*(a^2+b^2-(1/(150*(a*b)^4))*(2*(a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(a*b)^2+b^4))+
-        5*a*b^4*log((a+sqrt(a^2+b^2))/b)+5*a^4*b*log((b+sqrt(a^2+b^2))/a))^2)
+Vmt0 <- (1/6)*(a^2+b^2-(1/(150*(a*b)^4))*(2*(a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(a*b)^2+b^4))
+        +(5*a*b^4*log((a+sqrt(a^2+b^2))/b))+(5*a^4*b*log((b+sqrt(a^2+b^2))/a)))^2)
 
 # R plot - Temporal variance mark function
 par(mfrow=c(1,1))

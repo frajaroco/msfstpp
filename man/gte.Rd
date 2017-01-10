@@ -28,8 +28,8 @@ gte(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplif
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
-\item{ekmmt}{A vector containing the values of \eqn{\gamma_[te](v)} estimated.}
-\item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{kmmt(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
+\item{egte}{A vector containing the values of \eqn{\gamma_[te](v)} estimated.}
+\item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{gte(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
 \item{t.region}{If \code{t.region} is missing, the range of \code{xyt[,3]} is considered.}
 \item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
@@ -77,8 +77,8 @@ out <- gte(hpp,ht=0.12/sqrt(100))
 # R plot - Temporal mark variogram function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(0,max(out$gte,1/6))
-plot(out$dt,out$gte,type="l",xlab="t = time",ylab=expression(gamma[te](t)),
+yl <- c(0,max(out$egte,1/6))
+plot(out$dt,out$egte,type="l",xlab="t = time",ylab=expression(gamma[te](t)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$dt,rep(1/6,length(out$dt)),col=11)
 points(0,0,col=3,pch=13,cex=1.5)

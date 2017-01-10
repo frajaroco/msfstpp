@@ -67,27 +67,24 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   ptst <- xytimes
   npt <- length(ptsx)
   ndt <- length(dt)
-  snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
-  mummt <- mean(snorm)
   gtet <- rep(0,ndt)
-  
   
   storage.mode(gtet) <- "double"
   
   if (appro2[1]==1){
-    gteout <- .Fortran("gtecore",as.double(snorm),as.double(ptst),as.integer(npt),as.double(dt),
+    gteout <- .Fortran("gtecore",as.double(ptsx),as.double(ptsy),as.double(ptst),as.integer(npt),as.double(dt),
                         as.integer(ndt),as.integer(ker2),as.double(ht),(gtet),PACKAGE="msfstpp")
-    gtet <- gteout[[8]]
+    gtet <- gteout[[9]]
     
     dtf <- rep(0,ndt+2)
     dtf[3:(ndt+2)] <- dt
     dt <- dtf 
     
-    gte <- rep(0,ndt+2)
-    gte[2] <- gtet[1]
-    gte[3:(ndt+2)] <- gtet
+    egte <- rep(0,ndt+2)
+    egte[2] <- gtet[1]
+    egte[3:(ndt+2)] <- gtet
     
-    invisible(return(list(gte=gte,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(egte=egte,dt=dt,kernel=kernel,t.region=t.region)))
   } else {
     
     if(missing(t.lambda)){
@@ -137,22 +134,22 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
       wst <- 1/wsett
     }
     
-    gteout <- .Fortran("gtecoreinh",as.double(snorm),as.double(ptst),as.integer(npt),
+    gteout <- .Fortran("gtecoreinh",as.double(ptsx),as.double(ptsy),as.double(ptst),as.integer(npt),
                         as.double(dt),as.integer(ndt),as.double(t.lambda),as.integer(ker2),
                         as.double(ht),as.double(wrt),as.double(wtt),as.double(wbit),
                         as.double(wbimodt),as.double(wst),as.integer(correc2),(gtet),
                         PACKAGE="msfstpp")
     
-    gtet <- gteout[[15]]
+    gtet <- gteout[[16]]
     
     dtf <- rep(0,ndt+2)
     dtf[3:(ndt+2)] <- dt
     dt <- dtf 
     
-    gte <- rep(0,ndt+2)
-    gte[2] <- gtet[1]
-    gte[3:(ndt+2)] <- gtet
+    egte <- rep(0,ndt+2)
+    egte[2] <- gtet[1]
+    egte[3:(ndt+2)] <- gtet
     
-    invisible(return(list(gte=gte,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(egte=egte,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
   }
 }

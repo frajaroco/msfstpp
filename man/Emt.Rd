@@ -69,15 +69,15 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 # R plot
 plot(hpp)
 
-# This function provides an kernel estimator of the spatialtemporal mean mark function
+# This function provides an kernel estimator of the temporal mean mark function
 out <- Emt(hpp,ht=0.12/sqrt(100))
 
 # Temporal mean mark constant under homogeneous Poisson point processes
 a <- 1
 b <- 1
 
-ete <- ((a^5+b^5-sqrt(a^2+b^2)*(a^4-3*b^2*a^2+b^4))/(15*(a*b)^2)+
-((b^2*log((a+sqrt(a^2+b^2))/(b)))/(6*a))+((a^2*sqrt((b+sqrt(a^2+b^2))/(a)))/(6*b)))
+ete <- ((a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(b*a)^2+b^4))/(15*(a*b)^2))+
+((b^2*log((a+sqrt(a^2+b^2))/b))/(6*a))+((a^2*sqrt((b+sqrt(a^2+b^2))/a))/(6*b))
 
 # R plot - Temporal mean mark function
 par(mfrow=c(1,1))

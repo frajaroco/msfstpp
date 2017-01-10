@@ -4,16 +4,16 @@ C     This code provides an edge-corrected non-parametric kernel based
 C     estimator of the standardized temporal mark variogram function. 
 C
 
-      subroutine gtecoreinh(snorm,txy,n,t,nt,tlambda,kt,ht,wrt,wtt,
+      subroutine gtecoreinh(x,y,txy,n,t,nt,tlambda,kt,ht,wrt,wtt,
      +     wbit,wbimodt,wst,edg,gtet)
      
       implicit real*8(a-h,o-z)
 
       integer i,j,iv,n,nt,kt,edg
       double precision inhwij,inhvij,ht,kernt,gteminh,gteninh,gtet
-      double precision tij,mij,snormi,ti,wrt,wtt,wbit,txy,snorm
+      double precision tij,mij,xi,yi,ti,wrt,wtt,wbit,x,y,txy
       double precision wbimodt,wst,tlambda
-      dimension snorm(n),txy(n),t(nt),gteminh(nt),gteninh(nt)
+      dimension x(n),y(n),txy(n),t(nt),gteminh(nt),gteninh(nt)
       dimension wrt(n,n),wtt(n,n),wbit(n,nt),wbimodt(n,nt),wst(nt)
       dimension kt(3),edg(6),tlambda(n),gtet(nt)
        
@@ -24,12 +24,13 @@ C
 
       do iv=1,nt
       do i=1,n
-         snormi=snorm(i)
-         ti=txy(i)      
+         xi=x(i)
+         yi=y(i)
+         ti=txy(i)
       do j=1,n
       if (j.ne.i) then
       tij=abs(ti-txy(j))
-      mij=((snormi-snorm(j))**two)/two
+      mij=((sqrt(((xi-x(j))**two)+((yi-y(j))**two)))**two)/two
       if (kt(1).eq.1) then
       kernt=boxkernel((t(iv)-tij)/ht,ht)
       else if (kt(2).eq.1) then

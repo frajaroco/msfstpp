@@ -92,11 +92,11 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     dsf[3:(nds+2)] <- ds
     ds <- dsf 
     
-    gsp <- rep(0,nds+2)
-    gsp[2] <- gsps[1]
-    gsp[3:(nds+2)] <- gsps
+    egsp <- rep(0,nds+2)
+    egsp[2] <- gsps[1]
+    egsp[3:(nds+2)] <- gsps
     
-    invisible(return(list(gsp=gsp,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(egsp=egsp,ds=ds,kernel=kernel,s.region=s.region)))
   } else {
     
     if(missing(s.lambda)){
@@ -165,10 +165,10 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     dsf[3:(nds+2)] <- ds
     ds <- dsf 
     
-    gsp <- rep(0,nds+2)
-    gsp[2] <- gsps[1]
-    gsp[3:(nds+2)] <- gsps
+    egsp <- rep(0,nds+2)
+    egsp[2] <- gsps[1]
+    egsp[3:(nds+2)] <- gsps
     
-    invisible(return(list(gsp=gsp,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+    invisible(return(list(egsp=egsp,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
   }
 }

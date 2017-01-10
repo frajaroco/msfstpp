@@ -4,15 +4,15 @@ C     This code provides a non-parametric kernel based estimator of the
 C     temporal mark variogram function.
 C
 
-       subroutine gtecore(snorm,txy,n,t,nt,kt,ht,gtet)
+       subroutine gtecore(x,y,txy,n,t,nt,kt,ht,gtet)
 
 
        implicit real*8(a-h,o-z)
 
        integer i,j,iv,n,nt,kt
-       double precision wij,vij,ht,kernt,gtem,gten,gtet,snorm,txy
-       double precision tij,mij,snormi,ti
-       dimension snorm(n),txy(n),t(nt),gtem(nt),gten(nt),gtet(nt),kt(3)
+       double precision wij,vij,ht,kernt,gtem,gten,gtet,x,y,txy
+       double precision tij,mij,ti,xi,yi
+       dimension x(n),y(n),txy(n),t(nt),gtem(nt),gten(nt),gtet(nt),kt(3)
 
        gtem=0d0
        gten=0d0
@@ -21,12 +21,13 @@ C
 
        do iv=1,nt
         do i=1,n
-         snormi=snorm(i)
+         xi=x(i)
+         yi=y(i)
          ti=txy(i)
           do j=1,n
            if (j.ne.i) then
             tij=abs(ti-txy(j))
-            mij=((snormi-snorm(j))**two)/two
+            mij=((sqrt(((xi-x(j))**two)+((yi-y(j))**two)))**two)/two
               if (kt(1).eq.1) then
                kernt=boxkernel((t(iv)-tij)/ht,ht)
                 else if (kt(2).eq.1) then
