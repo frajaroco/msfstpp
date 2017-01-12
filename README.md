@@ -11,11 +11,11 @@ install.packages('devtools', dependencies=TRUE)
 and thereafter run the commands:
 ```
 require(devtools)
-install_github('frajaroco/msfstpp')
+devtools::install_github('frajaroco/msfstpp')
 ```
 
 ## References
-Stoyan, D., Rodríguez-Cortés, F. J., Mateu, J., and Gille, W. (2017). Mark variograms for spatio-temporal point processes. Forthcoming.
+- Stoyan, D., Rodríguez-Cortés, F. J., Mateu, J., and Gille, W. (2017). Mark variograms for spatio-temporal point processes. Spatial Statistics. Forthcoming.
 
 ## CiteBibtex
 ```
