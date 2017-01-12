@@ -15,7 +15,7 @@ devtools::install_github('frajaroco/msfstpp')
 ```
 
 ## References
-- Stoyan, D., Rodríguez-Cortés, F. J., Mateu, J., and Gille, W. (2017). Mark variograms for spatio-temporal point processes. Spatial Statistics. Forthcoming.
+- Stoyan, D., Rodríguez-Cortés, F. J., Mateu, J., and Gille, W. (2017). Mark variograms for spatio-temporal point processes. Spatial Statistics. *Forthcoming*.
 
 ## CiteBibtex
 ```
