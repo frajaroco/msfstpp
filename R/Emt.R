@@ -67,16 +67,15 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   ptst <- xytimes
   npt <- length(ptsx)
   ndt <- length(dt)
-  snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
   eEmt <- rep(0,ndt)
   
   storage.mode(eEmt) <- "double"
   
   if (appro2[1]==1){
-    Emtout <- .Fortran("kmtcore",as.double(snorm),as.double(ptst),as.integer(npt),as.double(dt),
+    Emtout <- .Fortran("emtcore",as.double(ptsx),as.double(ptsy),as.double(ptst),as.integer(npt),as.double(dt),
                        as.integer(ndt),as.integer(ker2),as.double(ht),(eEmt),PACKAGE="msfstpp")
     
-    eEmt <- Emtout[[8]]
+    eEmt <- Emtout[[9]]
 
     invisible(return(list(eEmt=eEmt,dt=dt,kernel=kernel,t.region=t.region)))
   } else {
@@ -128,13 +127,13 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
       wst <- 1/wsett
     }
     
-    Emtout <- .Fortran("kmtcoreinh",as.double(snorm),as.double(ptst),as.integer(npt),
+    Emtout <- .Fortran("emtcoreinh",as.double(ptsx),as.double(ptsy),as.double(ptst),as.integer(npt),
                        as.double(dt),as.integer(ndt),as.double(t.lambda),as.integer(ker2),
                        as.double(ht),as.double(wrt),as.double(wtt),as.double(wbit),
                        as.double(wbimodt),as.double(wst),as.integer(correc2),(eEmt),
                        PACKAGE="msfstpp")
     
-    eEmt <- Emtout[[15]]
+    eEmt <- Emtout[[16]]
     
     invisible(return(list(eEmt=eEmt,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
   }

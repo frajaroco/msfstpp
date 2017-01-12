@@ -67,18 +67,16 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   ptst <- xytimes
   npt <- length(ptsx)
   ndt <- length(dt)
-  snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
   emt <- Emt(xyt,t.region,t.lambda,dt,kt,ht,correction,approach)$eEmt
   eVmt <- rep(0,ndt)
   
   storage.mode(eVmt) <- "double"
   
   if (appro2[1]==1){
-    Vmtout <- .Fortran("Vmtcore",as.double(snorm),as.double(ptst),as.integer(npt),as.double(dt),
-                       as.integer(ndt),as.integer(ker2),as.double(ht),as.double(emt),
-                       (eVmt),PACKAGE="msfstpp")
+    Vmtout <- .Fortran("Vmtcore",as.double(ptsx),as.double(ptsy),as.double(ptst),as.integer(npt),as.double(dt),
+                       as.integer(ndt),as.integer(ker2),as.double(ht),as.double(emt),(eVmt),PACKAGE="msfstpp")
     
-    eVmt <- Vmtout[[9]]
+    eVmt <- Vmtout[[10]]
     
     invisible(return(list(eVmt=eVmt,dt=dt,kernel=kernel,t.region=t.region)))
   } else {
@@ -130,13 +128,13 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
       wst <- 1/wsett
     }
     
-    Vmtout <- .Fortran("Vmtcoreinh",as.double(snorm),as.double(ptst),as.integer(npt),
+    Vmtout <- .Fortran("Vmtcoreinh",as.double(ptsx),as.double(ptsy),as.double(ptst),as.integer(npt),
                        as.double(dt),as.integer(ndt),as.double(t.lambda),as.integer(ker2),
                        as.double(ht),as.double(wrt),as.double(wtt),as.double(wbit),
                        as.double(wbimodt),as.double(wst),as.integer(correc2),as.double(emt),
                        (eVmt),PACKAGE="msfstpp")
     
-    eVmt <- Vmtout[[16]]
+    eVmt <- Vmtout[[17]]
     
     invisible(return(list(eVmt=eVmt,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
   }

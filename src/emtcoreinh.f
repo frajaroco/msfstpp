@@ -1,36 +1,36 @@
 C     Francisco J. Rodriguez-Cortes, November 2016
 C
 C     This code provides an edge-corrected non-parametric kernel based
-C     estimator of the standardized temporal variance mark function. 
+C     estimator of the standardized temporal mean mark function. 
 C
 
-      subroutine Vmtcoreinh(x,y,txy,n,t,nt,tlambda,kt,ht,wrt,wtt,
-     +     wbit,wbimodt,wst,edg,emt,Vmt)
+      subroutine emtcoreinh(x,y,txy,n,t,nt,tlambda,kt,ht,wrt,wtt,
+     +     wbit,wbimodt,wst,edg,emt)
      
       implicit real*8(a-h,o-z)
 
       integer i,j,iv,n,nt,kt,edg
-      double precision inhwij,inhvij,ht,kernt,Vmtminh,Vmtninh,Vmt
+      double precision inhwij,inhvij,ht,kernt,emtminh,emtninh,emt
       double precision tij,mij,xi,yi,ti,wrt,wtt,wbit,x,y,txy
-      double precision wbimodt,wst,tlambda,emt
-      dimension x(n),y(n),txy(n),t(nt),Vmtminh(nt),Vmtninh(nt)
+      double precision wbimodt,wst,tlambda
+      dimension x(n),y(n),txy(n),t(nt),emtminh(nt),emtninh(nt)
       dimension wrt(n,n),wtt(n,n),wbit(n,nt),wbimodt(n,nt),wst(nt)
-      dimension kt(3),edg(6),tlambda(n),Vmt(nt),emt(nt)
+      dimension kt(3),edg(6),tlambda(n),emt(nt)
        
-       Vmtminh=0d0
-       Vmtninh=0d0
+       emtminh=0d0
+       emtninh=0d0
 
           two=2d0
-          
+
       do iv=1,nt
       do i=1,n
          xi=x(i)
-         yi=y(n)
+         yi=y(i)
          ti=txy(i)      
       do j=1,n
       if (j.ne.i) then
       tij=abs(ti-txy(j))
-      mij=(sqrt(((xi-x(j))**two)+((yi-y(j))**two))-emt(iv))**two
+      mij=sqrt(((xi-x(j))**two)+((yi-y(j))**two))
       if (kt(1).eq.1) then
       kernt=boxkernel((t(iv)-tij)/ht,ht)
       else if (kt(2).eq.1) then
@@ -43,49 +43,49 @@ C    none
       if (edg(1).eq.1) then
        inhwij=(mij*kernt)/(tlambda(i)*tlambda(j))
        inhvij=kernt/(tlambda(i)*tlambda(j))
-       Vmtminh(iv)=Vmtminh(iv)+inhwij
-       Vmtninh(iv)=Vmtninh(iv)+inhvij  
+       emtminh(iv)=emtminh(iv)+inhwij
+       emtninh(iv)=emtninh(iv)+inhvij  
       end if                  
 C    isotropic
       if (edg(2).eq.1) then                  
       inhwij=(mij*kernt*wrt(i,j))/(tlambda(i)*tlambda(j))
       inhvij=(kernt*wrt(i,j))/(tlambda(i)*tlambda(j))
-      Vmtminh(iv)=Vmtminh(iv)+inhwij
-      Vmtninh(iv)=Vmtninh(iv)+inhvij
+      emtminh(iv)=emtminh(iv)+inhwij
+      emtninh(iv)=emtninh(iv)+inhvij
       end if
 C    border
       if (edg(3).eq.1) then                  
       inhwij=(mij*kernt*wbit(i,iv))/(tlambda(i)*tlambda(j))
       inhvij=(kernt*wbit(i,iv))/(tlambda(i)*tlambda(j))
-      Vmtminh(iv)=Vmtminh(iv)+inhwij
-      Vmtninh(iv)=Vmtninh(iv)+inhvij
+      emtminh(iv)=emtminh(iv)+inhwij
+      emtninh(iv)=emtninh(iv)+inhvij
       end if
 C    modified.border
       if (edg(4).eq.1) then
       inhwij=(mij*kernt*wbimodt(i,iv))/(tlambda(i)*tlambda(j))
       inhvij=(kernt*wbimodt(i,iv))/(tlambda(i)*tlambda(j))
-      Vmtminh(iv)=Vmtminh(iv)+inhwij
-      Vmtninh(iv)=Vmtninh(iv)+inhvij 
+      emtminh(iv)=emtminh(iv)+inhwij
+      emtninh(iv)=emtninh(iv)+inhvij 
       end if                  
 C    translate
       if (edg(5).eq.1) then
       inhwij=(mij*kernt*wtt(i,j))/(tlambda(i)*tlambda(j))
       inhvij=(kernt*wtt(i,j))/(tlambda(i)*tlambda(j))
-      Vmtminh(iv)=Vmtminh(iv)+inhwij
-      Vmtninh(iv)=Vmtninh(iv)+inhvij
+      emtminh(iv)=emtminh(iv)+inhwij
+      emtninh(iv)=emtninh(iv)+inhvij
       end if
 C    setcovf         
       if (edg(6).eq.1) then
       inhwij=(mij*kernt*wst(iv))/(tlambda(i)*tlambda(j))
       inhvij=(kernt*wst(iv))/(tlambda(i)*tlambda(j))
-      Vmtminh(iv)=Vmtminh(iv)+inhwij
-      Vmtninh(iv)=Vmtninh(iv)+inhvij
+      emtminh(iv)=emtminh(iv)+inhwij
+      emtninh(iv)=emtninh(iv)+inhvij
       end if
       end if
       end if
        end do
        end do
-       Vmt(iv)=Vmtminh(iv)/Vmtninh(iv)
+       emt(iv)=emtminh(iv)/emtninh(iv)
        end do
       
         return
