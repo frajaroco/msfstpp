@@ -55,10 +55,6 @@ point processes, Submitted .
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-Rodriguez-Cortes, F. J.(2015). \code{mvstpp}: Mark Variogram for Spatio-Temporal Point Processes. GitHub repository. URL \url{https://github.com/frajaroco/mvstpp}.
-}
 \examples{
 ## Not run:
 #################
