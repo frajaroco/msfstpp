@@ -87,8 +87,9 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                         ,as.double(hs),(eEmr),PACKAGE="msfstpp")
     
     eEmr <- Emrout[[9]]
+    Emr0 <- mean(ptst)
     
-    invisible(return(list(eEmr=eEmr,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(eEmr=eEmr,Emr0=Emr0,ds=ds,kernel=kernel,s.region=s.region)))
   } else {
     
     if(missing(s.lambda)){
@@ -153,7 +154,8 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                        (eEmr),PACKAGE="msfstpp")
     
     eEmr <- Emrout[[16]]
+    Emr0 <- mean(ptst)
     
-    invisible(return(list(eEmr=eEmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+    invisible(return(list(eEmr=eEmr,Emr0=Emr0,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
   }
 }
