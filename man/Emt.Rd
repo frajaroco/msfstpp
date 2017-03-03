@@ -27,6 +27,7 @@
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{eEmt}{A vector containing the values of \eqn{E_[te](v)} estimated.}
+\item{Emt0}{A single value of \eqn{E_[te](0)} estimated at \eqn{v=0}.}
 \item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{Emt(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
 \item{t.region}{If \code{t.region} is missing, the range of \code{xyt[,3]} is considered.}
@@ -77,13 +78,14 @@ ete <- ((a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(b*a)^2+b^4))/(15*(a*b)^2))+
 
 # R plot - Temporal mean mark function
 par(mfrow=c(1,1))
-yl <- c(min(out$eEmt,ete),max(out$eEmt,ete))
+xl <- c(0,0.25)
+yl <- c(min(out$eEmt,ete,out$Emt0),max(out$eEmt,ete,out$Emt0))
 plot(out$dt,out$eEmt,type="l",xlab="t = time",ylab=expression(E[te](t)),
-     ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+     xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$dt,rep(ete,length(out$dt)),col=11)
-
+points(0,ete,col=3,pch=13,cex=1.5)
+points(0,out$Emt0,col=1,pch=19,cex=1.5)
 ## End(Not run)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
