@@ -88,8 +88,9 @@ Vmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                        ,as.double(hs),as.double(emr),(eVmr),PACKAGE="msfstpp")
     
     eVmr <- Vmrout[[10]]
+    Vmr0 <- var(ptst)
     
-    invisible(return(list(eVmr=eVmr,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(eVmr=eVmr,Vmr0=Vmr0,ds=ds,kernel=kernel,s.region=s.region)))
   } else {
     
     if(missing(s.lambda)){
@@ -154,7 +155,8 @@ Vmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                        as.double(emr),(eVmr),PACKAGE="msfstpp")
     
     eVmr <- Vmrout[[17]]
+    Vmr0 <- var(ptst)
     
-    invisible(return(list(eVmr=eVmr,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+    invisible(return(list(eVmr=eVmr,Vmr0=Vmr0,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
   }
 }
