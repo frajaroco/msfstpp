@@ -29,6 +29,7 @@ Vmt(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplif
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{eVmt}{A vector containing the values of \eqn{V_[te](v)} estimated.}
+\item{Vmt0}{A single value of \eqn{V_[te](0)} estimated at \eqn{v=0}.}
 \item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{Vmt(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
 \item{t.region}{If \code{t.region} is missing, the range of \code{xyt[,3]} is considered.}
@@ -73,16 +74,18 @@ out <- Vmt(hpp,ht=0.12/sqrt(100))
 # Temporal mark constant under homogeneous Poisson point processes
 a <- 1
 b <- 1
-Vmt0 <- (1/6)*(a^2+b^2-(1/(150*(a*b)^4))*(2*(a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(a*b)^2+b^4))
+eVt <- (1/6)*(a^2+b^2-(1/(150*(a*b)^4))*(2*(a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(a*b)^2+b^4))
         +(5*a*b^4*log((a+sqrt(a^2+b^2))/b))+(5*a^4*b*log((b+sqrt(a^2+b^2))/a)))^2)
 
 # R plot - Temporal variance mark function
 par(mfrow=c(1,1))
-yl <- c(min(out$eVmt,Vmt0),max(out$eVmt,Vmt0))
+xl <- c(0,0.25)
+yl <- c(min(out$eVmt,eVt,out$Vmt0),max(out$eVmt,eVt,out$Vmt0))
 plot(out$dt,out$eVmt,type="l",xlab="t = time",ylab=expression(V[te](t)),
-                 ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$dt,rep(Vmt0,length(out$dt)),col=11)
-
+      xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+lines(out$dt,rep(eVt,length(out$dt)),col=11)
+points(0,eVt,col=3,pch=13,cex=1.5)
+points(0,out$Vmt0,col=1,pch=19,cex=1.5)
 ## End(Not run)
 
 }

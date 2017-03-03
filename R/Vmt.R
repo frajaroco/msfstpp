@@ -67,6 +67,7 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   ptst <- xytimes
   npt <- length(ptsx)
   ndt <- length(dt)
+  snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
   emt <- Emt(xyt,t.region,t.lambda,dt,kt,ht,correction,approach)$eEmt
   eVmt <- rep(0,ndt)
   
@@ -77,8 +78,9 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
                        as.integer(ndt),as.integer(ker2),as.double(ht),as.double(emt),(eVmt),PACKAGE="msfstpp")
     
     eVmt <- Vmtout[[10]]
+    Vmt0 <- var(snorm)
     
-    invisible(return(list(eVmt=eVmt,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(eVmt=eVmt,Vmt0=Vmt0,dt=dt,kernel=kernel,t.region=t.region)))
   } else {
     
     if(missing(t.lambda)){
@@ -135,7 +137,8 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
                        (eVmt),PACKAGE="msfstpp")
     
     eVmt <- Vmtout[[17]]
+    Vmt0 <- var(snorm)
     
-    invisible(return(list(eVmt=eVmt,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(eVmt=eVmt,Vmt0=Vmt0,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
   }
 }
