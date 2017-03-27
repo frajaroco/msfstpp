@@ -67,7 +67,7 @@ It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approa
   ptst <- xytimes
   npt <- length(ptsx)
   ndt <- length(dt)
-  snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
+  snorm <- apply(as.matrix(pts),MARGIN=1,FUN=norm,type="O")
   mumt <- mean(snorm)
   varmt <- var(snorm)
   eImt <- rep(0,ndt)
