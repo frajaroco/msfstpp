@@ -67,7 +67,7 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   ptst <- xytimes
   npt <- length(ptsx)
   ndt <- length(dt)
-  snorm <- apply(as.matrix(pts),MARGIN=1,FUN=norm,type="O")
+  snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
   eEmt <- rep(0,ndt)
   
   storage.mode(eEmt) <- "double"
