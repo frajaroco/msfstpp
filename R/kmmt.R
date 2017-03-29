@@ -67,7 +67,7 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
   ptst <- xytimes
   npt <- length(ptsx)
   ndt <- length(dt)
-  snorm <- apply(pts,MARGIN=1,FUN=norm,type="O")
+  snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
   mummt <- mean(snorm)
   ekmmt <- rep(0,ndt)
   
