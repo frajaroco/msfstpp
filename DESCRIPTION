@@ -7,12 +7,11 @@ Date: 2016-10-23
 Author: Francisco J. Rodriguez-Cortes
 Maintainer: Francisco J. Rodriguez-Cortes <cortesf@uji.es>
 Depends:
-    R (>= 3.3.1),
-    splancs,
+    R (>= 3.4.0),
     KernSmooth,
     spatstat,
     stpp,
-    stats
+    geoR,
 Description: Basic toolkit for the exploration and analysis of the spatio-temporal point patterns through mark summary functions.
 License: GPL-3
 LazyLoad: yes
