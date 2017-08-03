@@ -1,14 +1,15 @@
 Package: msfstpp
 Type: Package
 Title: Mark summary functions for spatio-temporal point processes
-Version: 0.1
+Version: 0.1.1
 Nickname: Coffee Aroma
-Date: 2016-10-23
+Date: 2017-08-03
 Author: Francisco J. Rodriguez-Cortes
 Maintainer: Francisco J. Rodriguez-Cortes <cortesf@uji.es>
 Depends:
     R (>= 3.4.0),
     KernSmooth,
+    splancs,
     spatstat,
     stpp,
     geoR,

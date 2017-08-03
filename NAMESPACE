@@ -1,8 +1,10 @@
 useDynLib(msfstpp)
-exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")
 
+import(splancs)
 import(spatstat)
 import(KernSmooth)
 import(stpp)
 import(geoR)
+
 importFrom("stats","dist","var","rpois","runif")
