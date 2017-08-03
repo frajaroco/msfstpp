@@ -1,6 +1,6 @@
 # msfstpp: Mark summary functions for spatio-temporal point processes
 
-Basic toolkit for the exploration and analysis of the spatio-temporal point patterns through mark summary functions. This repository is based on `spatstat`, `geoR`, `stpp`and `KernSmooth` packages.
+Basic toolkit for the exploration and analysis of the spatio-temporal point patterns through mark summary functions. This repository is based on `splancs`, `spatstat`, `geoR`, `stpp`and `KernSmooth` packages.
 
 ## Installation guide
 
