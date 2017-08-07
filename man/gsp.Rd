@@ -29,7 +29,7 @@ gsp(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 \item{egsp}{ A vector containing the values of \eqn{\gamma_{sp}(r)} estimated}
 \item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \code{gsp(u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
-\item{s.region}{If \code{s.region} is missing, the Ripley-Rasson estimate of the spatial domain is considered under the parameter \code{approach="standardised"}. The bounding box of \code{xyt[,1:2]} is considered under the parameter \code{approach="simplified"}.}
+\item{gsptheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}
 \item{s.lambda}{If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
 }
 %% ...
@@ -70,16 +70,15 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the spatial mark variogram function
-out <- gsp(hpp,hs=0.12/sqrt(100))
+out <- gsp(hpp)
 
 # R plot - Spatial mark variogram function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(0,out$egsp),max(0,out$egsp))
+yl <- c(0,max(out$gsptheo,out$egsp))
 plot(out$ds,out$egsp,type="l",xlab="r = distance",ylab=expression(gamma[sp](r)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$ds,rep(1/12,length(out$ds)),col=11)
-points(0,0,col=11,cex=1.5)
+lines(out$ds,rep(out$gsptheo,length(out$ds)),col=11)
 
 ## End(Not run)
 

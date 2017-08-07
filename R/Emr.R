@@ -1,5 +1,7 @@
 Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplified"){
   
+  verifyclass(xyt,"stpp")
+  
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
   if (any(nbg <- is.na(id))){
@@ -32,21 +34,45 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   
   dup <- duplicated(data.frame(xyt[,1],xyt[,2],xyt[,3]),fromLast = TRUE)[1]
   if (dup == TRUE){
-    messnbd <- paste("spatio-temporal data contain duplicated points")
+    messnbd <- paste("space-time data contain duplicated points")
     warning(messnbd,call.=FALSE)
   }
   
-  if (missing(hs)){
-    d <- dist(xyt[,1:2])
-    hs <- dpik(d,kernel=ks,range.x=c(min(d),max(d)))
-  }
-  
   if (missing(s.region)){
-      s.region <- sbox(xyt[, 1:2], xfrac = 0.01, yfrac = 0.01)
+    s.region <- sbox(xyt[, 1:2], xfrac = 0.01, yfrac = 0.01)
   }
+  bsupt <- max(xyt[,3])
+  binft <- min(xyt[,3])
   
-  bsw <- owin(poly=list(x=s.region[,1],y=s.region[,2]))
+  pts <- xyt[,1:2]
+  xytimes <- xyt[,3]
+  ptsx <- pts[,1]
+  ptsy <- pts[,2]
+  ptst <- xytimes
+  npt <- length(ptsx)
+
+  options(warn = -1) 
   
+  nedges <- length(s.region[,1])
+  s.region[,2] <- s.region[,2] - min(s.region[,2])
+  nxt <- c(2:nedges, 1)
+  dx <- s.region[,1][nxt] - s.region[,1]
+  ym <- (s.region[,2] + s.region[,2][nxt])/2
+  Areaxy <- -sum(dx * ym)
+  
+  if (Areaxy > 0){
+    bsw = owin(poly = list(x = s.region[,1], y = s.region[,2]))}
+  else
+    bsw = owin(poly = list(x = s.region[,1][length(s.region[,1]):1], y = s.region[,2][length(s.region[,1]):1]))
+  
+  area <- area(bsw)
+  pert <- perimeter(bsw)
+  pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
+  
+  if (missing(hs)){
+  hs <- bw.pcf(pxy)[1]
+}
+
   if (missing(ds)){
     rect <- as.rectangle(bsw)
     maxd <- min(diff(rect$xrange),diff(rect$yrange))/4
@@ -57,16 +83,8 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   }
   
   kernel <- c(ks=ks,hs=hs)
-  
-  pts <- xyt[,1:2]
-  xytimes <- xyt[,3]
-  ptsx <- pts[,1]
-  ptsy <- pts[,2]
-  ptst <- xytimes
-  npt <- length(ptsx)
+  Emrtheo <- (bsupt-binft)/2
   nds <- length(ds)
-  area <- area(bsw)
-  pert <- perimeter(bsw)
   eEmr <- rep(0,nds)
   
   storage.mode(eEmr) <- "double"
@@ -77,9 +95,8 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                         ,as.double(hs),(eEmr),PACKAGE="msfstpp")
     
     eEmr <- Emrout[[9]]
-    Emr0 <- mean(ptst)
     
-    invisible(return(list(eEmr=eEmr,Emr0=Emr0,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(eEmr=eEmr,ds=ds,kernel=kernel,Emrtheo=Emrtheo)))
   } else {
     
     if(missing(s.lambda)){
@@ -97,10 +114,6 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     wbi <- array(0,dim=c(npt,nds))
     wbimod <- array(0,dim=c(npt,nds))
     wss <- rep(0,nds)
-    
-    options(warn = -1) 
-    
-    pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
     
     # correction="isotropic"
     
@@ -144,8 +157,7 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
                        (eEmr),PACKAGE="msfstpp")
     
     eEmr <- Emrout[[16]]
-    Emr0 <- mean(ptst)
     
-    invisible(return(list(eEmr=eEmr,Emr0=Emr0,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+    invisible(return(list(eEmr=eEmr,ds=ds,kernel=kernel,Emrtheo=Emrtheo,s.lambda=s.lambda)))
   }
 }

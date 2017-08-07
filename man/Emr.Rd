@@ -29,10 +29,9 @@ Emr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{eEmr}{A vector containing the values of \eqn{E_[sp](u)} estimated.}
-\item{Emr0}{A single value of \eqn{E_[sp](0)} estimated at \eqn{u=0}.}
 \item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \code{Emr(u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
-\item{s.region}{If \code{s.region} is missing, the Ripley-Rasson estimate of the spatial domain is considered under the parameter \code{approach="standardised"}. The bounding box of \code{xyt[,1:2]} is considered under the parameter \code{approach="simplified"}.}
+\item{Emrtheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}
 \item{s.lambda}{If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
 }
 %% ...
@@ -69,7 +68,7 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the spatial mean mark function
-out <- Emr(hpp,hs=0.12/sqrt(100))
+out <- Emr(hpp)
 
 # R plot - Spatial mean mark function
 par(mfrow=c(1,1))
@@ -78,8 +77,6 @@ yl <- c(min(1/2,out$eEmr,out$Emr0),max(1/2,out$eEmr,out$Emr0))
 plot(out$ds,out$eEmr,type="l",xlab="r = distance",ylab=expression(E[sp](r)),
           xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$ds,rep(1/2,length(out$ds)),col=11)
-points(0,1/2,col=3,pch=13,cex=1.5)
-points(0,out$Emr0,col=1,pch=19,cex=1.5)
 ## End(Not run)
 
 }

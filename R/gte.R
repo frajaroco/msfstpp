@@ -1,5 +1,7 @@
 gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
   
+  verifyclass(xyt,"stpp")
+  
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
   if (any(nbg <- is.na(id))){
@@ -49,6 +51,9 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   
   bsupt <- max(t.region)
   binft <- min(t.region)
+  W <- sbox(xyt[,1:2], xfrac=0.01, yfrac=0.01)
+  a <- diff(range(W[,1]))
+  b <- diff(range(W[,2]))
   
   if (missing(dt)) {
     maxt <- (bsupt-binft)/4
@@ -59,6 +64,7 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   }
   
   kernel <- c(kt=kt,ht=ht)
+  gtetheo <- ((a^2)+(b^2))/12
   
   pts <- xyt[,1:2]
   xytimes <- xyt[,3]
@@ -84,7 +90,7 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     egte[2] <- gtet[1]
     egte[3:(ndt+2)] <- gtet
     
-    invisible(return(list(egte=egte,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(egte=egte,dt=dt,kernel=kernel,gtetheo=gtetheo)))
   } else {
     
     if(missing(t.lambda)){
@@ -150,6 +156,6 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     egte[2] <- gtet[1]
     egte[3:(ndt+2)] <- gtet
     
-    invisible(return(list(egte=egte,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(egte=egte,dt=dt,kernel=kernel,gtetheo=gtetheo,t.lambda=t.lambda)))
   }
 }

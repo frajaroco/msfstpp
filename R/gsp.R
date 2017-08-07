@@ -1,5 +1,7 @@
 gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplified"){
   
+  verifyclass(xyt,"stpp")
+  
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
   if (any(nbg <- is.na(id))){
@@ -36,27 +38,11 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     warning(messnbd,call.=FALSE)
   }
   
-  if (missing(hs)){
-    d <- dist(xyt[,1:2])
-    hs <- dpik(d,kernel=ks,range.x=c(min(d),max(d)))
-  }
-  
   if (missing(s.region)){
-      s.region <- sbox(xyt[, 1:2], xfrac = 0.01, yfrac = 0.01)
+    s.region <- sbox(xyt[, 1:2], xfrac = 0.01, yfrac = 0.01)
   }
-  
-  bsw <- owin(poly=list(x=s.region[,1],y=s.region[,2]))
-  
-  if (missing(ds)){
-    rect <- as.rectangle(bsw)
-    maxd <- min(diff(rect$xrange),diff(rect$yrange))/4
-    ds <- seq(hs, maxd,len=100)[-1]
-    ds <- sort(ds)
-  }  
-  if(ds[1]==0){ds <- ds[-1]
-  }
-  
-  kernel <- c(ks=ks,hs=hs)
+  bsupt <- max(xyt[,3])
+  binft <- min(xyt[,3])
   
   pts <- xyt[,1:2]
   xytimes <- xyt[,3]
@@ -64,9 +50,41 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   ptsy <- pts[,2]
   ptst <- xytimes
   npt <- length(ptsx)
-  nds <- length(ds)
+  
+  options(warn = -1) 
+  
+  nedges <- length(s.region[,1])
+  s.region[,2] <- s.region[,2] - min(s.region[,2])
+  nxt <- c(2:nedges, 1)
+  dx <- s.region[,1][nxt] - s.region[,1]
+  ym <- (s.region[,2] + s.region[,2][nxt])/2
+  Areaxy <- -sum(dx * ym)
+  
+  if (Areaxy > 0){
+    bsw = owin(poly = list(x = s.region[,1], y = s.region[,2]))}
+  else
+    bsw = owin(poly = list(x = s.region[,1][length(s.region[,1]):1], y = s.region[,2][length(s.region[,1]):1]))
+  
   area <- area(bsw)
   pert <- perimeter(bsw)
+  pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
+  
+  if (missing(hs)){
+    hs <- bw.pcf(pxy)[1]
+  }
+  
+  if (missing(ds)){
+    rect <- as.rectangle(bsw)
+    maxd <- min(diff(rect$xrange),diff(rect$yrange))/4
+    ds <- seq(hs, maxd,len=100)[-1]
+    ds <- sort(ds)
+  }
+  if(ds[1]==0){ds <- ds[-1]
+  }
+  
+  kernel <- c(ks=ks,hs=hs)
+  gsptheo <- ((bsupt-binft)^2)/12
+  nds <- length(ds)
   gsps <- rep(0,nds)
   
   storage.mode(gsps) <- "double"
@@ -86,7 +104,7 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     egsp[2] <- gsps[1]
     egsp[3:(nds+2)] <- gsps
     
-    invisible(return(list(egsp=egsp,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(egsp=egsp,ds=ds,kernel=kernel,gsptheo=gsptheo)))
   } else {
     
     if(missing(s.lambda)){
@@ -104,10 +122,6 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     wbi <- array(0,dim=c(npt,nds))
     wbimod <- array(0,dim=c(npt,nds))
     wss <- rep(0,nds)
-    
-    options(warn = -1) 
-    
-    pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
     
     # correction="isotropic"
     
@@ -160,6 +174,6 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     egsp[2] <- gsps[1]
     egsp[3:(nds+2)] <- gsps
     
-    invisible(return(list(egsp=egsp,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+    invisible(return(list(egsp=egsp,ds=ds,kernel=kernel,gsptheo=gsptheo,s.lambda=s.lambda)))
   }
 }
