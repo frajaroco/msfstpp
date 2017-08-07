@@ -131,6 +131,7 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
         wbimodt[,j] <- (bj>dt[j])/.eroded.areat(t.region,dt[j])
       }
       wbit[is.na(wbit)] <- 0
+      wbimodt[is.na(wbimodt)] <- 0
     }
     
     # correction="setcovf"
@@ -156,6 +157,6 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     egte[2] <- gtet[1]
     egte[3:(ndt+2)] <- gtet
     
-    invisible(return(list(egte=egte,dt=dt,kernel=kernel,gtetheo=gtetheo,t.lambda=t.lambda)))
+    invisible(return(list(egte=egte,dt=dt,kernel=kernel,gtetheo=gtetheo)))
   }
 }

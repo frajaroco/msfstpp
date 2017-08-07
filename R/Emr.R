@@ -49,7 +49,6 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   ptsx <- pts[,1]
   ptsy <- pts[,2]
   ptst <- xytimes
-  npt <- length(ptsx)
 
   options(warn = -1) 
   
@@ -84,6 +83,7 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   
   kernel <- c(ks=ks,hs=hs)
   Emrtheo <- (bsupt-binft)/2
+  npt <- pxy$n[1]
   nds <- length(ds)
   eEmr <- rep(0,nds)
   
@@ -132,11 +132,12 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     
     if(any(correction=="border")|any(correction=="modified.border")){
       bi <- bdist.points(pxy)
-      for(i in 1:nds) { 
+      for(i in 1:nds){ 
         wbi[,i] <- (bi>ds[i])/sum((bi>ds[i])/s.lambda)
         wbimod[,i] <- (bi>ds[i])/eroded.areas(bsw,ds[i])
       }
       wbi[is.na(wbi)] <- 0
+      wbimod[is.na(wbimod)] <- 0
     }
     
     # correction="setcovf"
@@ -158,6 +159,6 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     
     eEmr <- Emrout[[16]]
     
-    invisible(return(list(eEmr=eEmr,ds=ds,kernel=kernel,Emrtheo=Emrtheo,s.lambda=s.lambda)))
+    invisible(return(list(eEmr=eEmr,ds=ds,kernel=kernel,Emrtheo=Emrtheo)))
   }
 }

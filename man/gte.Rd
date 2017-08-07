@@ -14,7 +14,7 @@ gte(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplif
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{t.region}{Vector containing the minimum and maximum values of the time interval.}
-  \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}.}
+  \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}. If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
   \item{dt}{A vector of times \code{v} at which \code{gte(v)} is computed.}
   \item{kt}{A kernel function for the temporal distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{ht}{A bandwidth of the kernel function \code{kt}.}
@@ -31,9 +31,7 @@ gte(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplif
 \item{egte}{A vector containing the values of \eqn{\gamma_[te](v)} estimated.}
 \item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{gte(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
-\item{gtetheo}{Value under the Poisson case is calculated considering the side lengths of the bounding box of \code{xyt[,1:2]}.}
-\item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
-}
+\item{gtetheo}{Value under the Poisson case is calculated considering the side lengths of the bounding box of \code{xyt[,1:2]}.}}
 %% ...
 \references{
 %% ~put references to the literature/web site here ~
@@ -77,7 +75,7 @@ out <- gte(hpp)
 # R plot - Temporal mark variogram function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(0,max(out$egte,1/6))
+yl <- c(0,max(out$egte,out$gtetheo))
 plot(out$dt,out$egte,type="l",xlab="t = time",ylab=expression(gamma[te](t)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$dt,rep(out$gtetheo,length(out$dt)),col=11)

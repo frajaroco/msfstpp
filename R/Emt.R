@@ -1,5 +1,7 @@
 Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
   
+  verifyclass(xyt,"stpp")
+  
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
   if (any(nbg <- is.na(id))){
@@ -49,6 +51,9 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   
   bsupt <- max(t.region)
   binft <- min(t.region)
+  W <- sbox(xyt[,1:2], xfrac=0.01, yfrac=0.01)
+  a <- diff(range(W[,1]))
+  b <- diff(range(W[,2]))
   
   if (missing(dt)) {
     maxt <- (bsupt-binft)/4
@@ -59,6 +64,8 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   }
   
   kernel <- c(kt=kt,ht=ht)
+  Emttheo <- ((a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(b*a)^2+b^4))/(15*(a*b)^2))+
+    (((b^2)*log((a+sqrt(a^2+b^2))/b))/(6*a))+(((a^2)*log((b+sqrt(a^2+b^2))/a))/(6*b))
   
   pts <- xyt[,1:2]
   xytimes <- xyt[,3]
@@ -79,7 +86,7 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     eEmt <- Emtout[[9]]
     Emt0 <- mean(snorm)
 
-    invisible(return(list(eEmt=eEmt,Emt0=Emt0,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(eEmt=eEmt,Emt0=Emt0,dt=dt,kernel=kernel,Emttheo=Emttheo)))
   } else {
     
     if(missing(t.lambda)){
@@ -120,6 +127,7 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
         wbimodt[,j] <- (bj>dt[j])/.eroded.areat(t.region,dt[j])
       }
       wbit[is.na(wbit)] <- 0
+      wbimodt[is.na(wbimodt)] <- 0
     }
     
     # correction="setcovf"
@@ -138,6 +146,6 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     eEmt <- Emtout[[16]]
     Emt0 <- mean(snorm)
     
-    invisible(return(list(eEmt=eEmt,Emt0=Emt0,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(eEmt=eEmt,Emt0=Emt0,dt=dt,kernel=kernel,Emttheo=Emttheo)))
   }
 }
