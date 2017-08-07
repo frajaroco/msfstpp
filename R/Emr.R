@@ -71,7 +71,7 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   
   if (missing(hs)){
   hs <- bw.pcf(pxy)[1]
-}
+  }
 
   if (missing(ds)){
     rect <- as.rectangle(bsw)

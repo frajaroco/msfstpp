@@ -14,7 +14,7 @@ gsp(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{s.region}{Two-column matrix specifying polygonal region containing all data locations. }
-  \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}.}
+  \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}. If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
   \item{ds}{A vector of distances \code{u} at which \code{gsp(u)} is computed.}
   \item{ks}{A kernel function for the spatial distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{hs}{A bandwidth of the kernel function \code{ks}.}
@@ -29,9 +29,7 @@ gsp(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 \item{egsp}{ A vector containing the values of \eqn{\gamma_{sp}(r)} estimated}
 \item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \code{gsp(u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
-\item{gsptheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}
-\item{s.lambda}{If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
-}
+\item{gsptheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}}
 %% ...
 \references{
 %% ~put references to the literature/web site here ~

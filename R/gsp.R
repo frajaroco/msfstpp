@@ -49,7 +49,6 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   ptsx <- pts[,1]
   ptsy <- pts[,2]
   ptst <- xytimes
-  npt <- length(ptsx)
   
   options(warn = -1) 
   
@@ -61,9 +60,9 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   Areaxy <- -sum(dx * ym)
   
   if (Areaxy > 0){
-    bsw = owin(poly = list(x = s.region[,1], y = s.region[,2]))}
+    bsw = owin(poly=list(x=s.region[,1],y=s.region[,2]))}
   else
-    bsw = owin(poly = list(x = s.region[,1][length(s.region[,1]):1], y = s.region[,2][length(s.region[,1]):1]))
+    bsw = owin(poly=list(x=s.region[,1][length(s.region[,1]):1], y = s.region[,2][length(s.region[,1]):1]))
   
   area <- area(bsw)
   pert <- perimeter(bsw)
@@ -84,6 +83,7 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   
   kernel <- c(ks=ks,hs=hs)
   gsptheo <- ((bsupt-binft)^2)/12
+  npt <- pxy$n[1]
   nds <- length(ds)
   gsps <- rep(0,nds)
   
@@ -126,7 +126,7 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     # correction="isotropic"
     
     if(correction=="isotropic"){
-      wisot <- edge.Ripley(pxy,pairdist(pts))
+      wisot <- edge.Ripley(pxy,pairdist(pxy))
       wrs <- 1/wisot
     }
     
@@ -140,13 +140,14 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     
     if(any(correction=="border")|any(correction=="modified.border")){
       bi <- bdist.points(pxy)
-      for(i in 1:nds) { 
+      for(i in 1:nds){ 
         wbi[,i] <- (bi>ds[i])/sum((bi>ds[i])/s.lambda)
         wbimod[,i] <- (bi>ds[i])/eroded.areas(bsw,ds[i])
       }
       wbi[is.na(wbi)] <- 0
+      wbimod[is.na(wbimod)] <- 0
     }
-    
+
     # correction="setcovf"
     
     if(correction=="setcovf"){
@@ -174,6 +175,6 @@ gsp <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     egsp[2] <- gsps[1]
     egsp[3:(nds+2)] <- gsps
     
-    invisible(return(list(egsp=egsp,ds=ds,kernel=kernel,gsptheo=gsptheo,s.lambda=s.lambda)))
+    invisible(return(list(egsp=egsp,ds=ds,kernel=kernel,gsptheo=gsptheo)))
   }
 }
