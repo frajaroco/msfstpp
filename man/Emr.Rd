@@ -31,7 +31,8 @@ Emr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 \item{eEmr}{A vector containing the values of \eqn{E_[sp](u)} estimated.}
 \item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \code{Emr(u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
-\item{Emrtheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}}
+\item{Emrtheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}
+}
 %% ...
 \references{
 %% ~put references to the literature/web site here ~

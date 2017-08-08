@@ -30,7 +30,6 @@
 \item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{Emt(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
 \item{Emttheo}{Value under the Poisson case is calculated considering the side lengths of the bounding box of \code{xyt[,1:2]}.}}
-}
 %% ...
 \references{
 %% ~put references to the literature/web site here ~
