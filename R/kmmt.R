@@ -1,5 +1,7 @@
 kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
   
+  verifyclass(xyt,"stpp")
+  
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
   if (any(nbg <- is.na(id))){
@@ -59,6 +61,7 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
   }
   
   kernel <- c(kt=kt,ht=ht)
+  kmmttheo <- 1
   
   pts <- xyt[,1:2]
   xytimes <- xyt[,3]
@@ -78,9 +81,8 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
                         as.integer(ndt),as.integer(ker2),as.double(ht),(ekmmt),PACKAGE="msfstpp")
     
     ekmmt <- kmmtout[[8]]/(mummt^2)
-    kmmt0 <- sum((snorm^2)/(mummt^2))/npt
     
-    invisible(return(list(ekmmt=ekmmt,kmmt0=kmmt0,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,kmmttheo=kmmttheo)))
   } else {
     
     if(missing(t.lambda)){
@@ -100,7 +102,6 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
     wst <- rep(0,ndt)
     
     # correction="isotropic"
-    
     if(correction=="isotropic"){
       wist <- tedgeRipley(ptst,binft,bsupt)
       wrt <- 1/wist
@@ -113,7 +114,6 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
       }
     
     #  correction=="border" or "modified border"
-    
     if(any(correction=="border")|any(correction=="modified.border")){
       bj = .bdist.times(xytimes, t.region)
       for(j in 1:ndt) { 
@@ -121,10 +121,10 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
         wbimodt[,j] <- (bj>dt[j])/.eroded.areat(t.region,dt[j])
       }
       wbit[is.na(wbit)] <- 0
+      wbimodt[is.na(wbimodt)] <- 0
     }
     
     # correction="setcovf"
-    
     if(correction=="setcovf"){
       wsett <- tsetcovf(dt,ndt,bsupt-binft)
       wst <- 1/wsett
@@ -137,9 +137,8 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
                         PACKAGE="msfstpp")
     
     ekmmt <- kmmtout[[15]]/(mummt^2)
-    kmmt0 <- sum((snorm^2)/(mummt^2))/npt
     
-    invisible(return(list(ekmmt=ekmmt,kmmt0=kmmt0,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,kmmttheo=kmmttheo,t.lambda=t.lambda)))
   }
 }
 
