@@ -106,7 +106,6 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     wst <- rep(0,ndt)
     
     # correction="isotropic"
-    
     if(correction=="isotropic"){
       wist <- tedgeRipley(ptst,binft,bsupt)
       wrt <- 1/wist
@@ -119,7 +118,6 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     }
     
     #  correction=="border" or "modified border"
-    
     if(any(correction=="border")|any(correction=="modified.border")){
       bj = .bdist.times(xytimes, t.region)
       for(j in 1:ndt) { 
@@ -131,7 +129,6 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     }
     
     # correction="setcovf"
-    
     if(correction=="setcovf"){
       wsett <- tsetcovf(dt,ndt,bsupt-binft)
       wst <- 1/wsett

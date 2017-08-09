@@ -14,7 +14,7 @@ Ir(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplifi
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{s.region}{Two-column matrix specifying polygonal region containing all data locations. }
-  \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}.}
+  \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}. If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
   \item{ds}{A vector of distances \code{u} at which \code{Ir(u)} is computed.}
   \item{ks}{A kernel function for the spatial distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{hs}{A bandwidth of the kernel function \code{ks}.}
@@ -29,11 +29,9 @@ Ir(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplifi
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{eImr}{A vector containing the values of \eqn{I(u)} estimated.}
-\item{Imr0}{A single value of \eqn{I(0)} estimated at \eqn{u=0}.}
 \item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \code{Ir(u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
-\item{s.region}{If \code{s.region} is missing, the Ripley-Rasson estimate of the spatial domain is considered under the parameter \code{approach="standardised"}. The bounding box of \code{xyt[,1:2]} is considered under the parameter \code{approach="simplified"}.}
-\item{s.lambda}{If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
+\item{Imrtheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}
 }
 %% ...
 \references{
@@ -69,16 +67,15 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the spatial Moran's I-statistics
-out <- Ir(hpp,hs=0.12/sqrt(100))
+out <- Ir(hpp)
 
 # R plot - Spatial Moran's I-statistics
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(1,out$eImr,out$Imr0),max(1,out$eIr,out$Imr0))
+yl <- c(min(out$Imrtheo,out$eImr),max(1,out$eIr))
 plot(out$ds,out$eImr,type="l",xlab="r = distance",ylab=expression(I(r)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$ds,rep(0,length(out$ds)),col=11)
-points(0,out$Imr0,col=3,pch=13,cex=1.5)
+lines(out$ds,rep(out$Imrtheo,length(out$ds)),col=11)
 
 ## End(Not run)
 

@@ -1,5 +1,7 @@
 It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
   
+  verifyclass(xyt,"stpp")
+  
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
   if (any(nbg <- is.na(id))){
@@ -59,6 +61,7 @@ It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approa
   }
   
   kernel <- c(kt=kt,ht=ht)
+  Imttheo <- 0
   
   pts <- xyt[,1:2]
   xytimes <- xyt[,3]
@@ -80,9 +83,8 @@ It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approa
                        PACKAGE="msfstpp")
     
     eImt <- Imtout[[9]]/varmt
-    Imt0 <- 1
     
-    invisible(return(list(eImt=eImt,Imt0=Imt0,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(eImt=eImt,dt=dt,kernel=kernel,Imttheo=Imttheo)))
   } else {
     
     if(missing(t.lambda)){
@@ -123,6 +125,7 @@ It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approa
         wbimodt[,j] <- (bj>dt[j])/.eroded.areat(t.region,dt[j])
       }
       wbit[is.na(wbit)] <- 0
+      wbimodt[is.na(wbimodt)] <- 0
     }
     
     # correction="setcovf"
@@ -141,6 +144,6 @@ It <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approa
     eImt <- Imtout[[16]]/varmt
     Imt0 <- 1
     
-    invisible(return(list(eImt=eImt,Imt0=Imt0,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(eImt=eImt,dt=dt,kernel=kernel,Imttheo=Imttheo,t.lambda=t.lambda)))
   }
 }

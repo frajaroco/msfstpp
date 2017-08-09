@@ -1,5 +1,7 @@
 Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplified"){
   
+  verifyclass(xyt,"stpp")
+  
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
   if (any(nbg <- is.na(id))){
@@ -36,16 +38,41 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
     warning(messnbd,call.=FALSE)
   }
   
+  options(warn = -1) 
+  
+  if (missing(s.region)) s.region <- sbox(xyt[,1:2], xfrac=0.01, yfrac=0.01)
+  
+  xp <- s.region[,1]
+  yp <- s.region[,2]
+  nedges <- length(xp)
+  yp <- yp - min(yp) 
+  nxt <- c(2:nedges, 1)
+  dx <- xp[nxt] - xp
+  ym <- (yp + yp[nxt])/2
+  Areaxy <- -sum(dx * ym)
+  
+  if (Areaxy > 0){
+    bsw <- owin(poly = list(x = s.region[,1], y = s.region[,2]))
+  }else{
+    bsw <- owin(poly = list(x = s.region[,1][length(s.region[,1]):1], y = s.region[,2][length(s.region[,1]):1]))
+  }
+  
+  area <- area(bsw)
+  pert <- perimeter(bsw)
+  
+  ok <- inside.owin(xyt[,1],xyt[,2],w=bsw)
+  xyt.inside <- data.frame(x=xyt[,1][ok],y=xyt[,2][ok],t=xyt[,3][ok])
+  xyt.inside <- as.3dpoints(xyt.inside)
+  
+  ptsx <- xyt.inside[,1]
+  ptsy <- xyt.inside[,2]
+  ptst <- xyt.inside[,3]
+  
+  pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
+  
   if (missing(hs)){
-    d <- dist(xyt[,1:2])
-    hs <- dpik(d,kernel=ks,range.x=c(min(d),max(d)))
+    hs <- bw.stoyan(pxy)
   }
-  
-  if (missing(s.region)){
-      s.region <- sbox(xyt[, 1:2], xfrac = 0.01, yfrac = 0.01)
-  }
-  
-  bsw <- owin(poly=list(x=s.region[,1],y=s.region[,2]))
   
   if (missing(ds)){
     rect <- as.rectangle(bsw)
@@ -55,18 +82,13 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
   }
   if(ds[1]==0){ds <- ds[-1]
   }
+  bsupt <- max(ptst)
+  binft <- min(ptst)
   
   kernel <- c(ks=ks,hs=hs)
-  
-  pts <- xyt[,1:2]
-  xytimes <- xyt[,3]
-  ptsx <- pts[,1]
-  ptsy <- pts[,2]
-  ptst <- xytimes
-  npt <- length(ptsx)
+  Imrtheo <- 0
+  npt <- pxy$n[1]
   nds <- length(ds)
-  area <- area(bsw)
-  pert <- perimeter(bsw)
   mumr <- mean(ptst)
   varmr <-  ((npt-1)/npt)*var(ptst)
   eImr <- rep(0,nds)
@@ -79,9 +101,8 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
                        ,as.double(hs),as.double(mumr),(eImr),PACKAGE="msfstpp")
     
     eImr <- Imrout[[10]]/varmr
-    Imr0 <- 1
     
-    invisible(return(list(eImr=eImr,Imr0=Imr0,ds=ds,kernel=kernel,s.region=s.region)))
+    invisible(return(list(eImr=eImr,ds=ds,kernel=kernel,Imrtheo=Imrtheo)))
   } else {
     
     if(missing(s.lambda)){
@@ -100,14 +121,9 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
     wbimod <- array(0,dim=c(npt,nds))
     wss <- rep(0,nds)
     
-    options(warn = -1) 
-    
-    pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
-    
     # correction="isotropic"
-    
     if(correction=="isotropic"){
-      wisot <- edge.Ripley(pxy,pairdist(pts))
+      wisot <- edge.Ripley(pxy,pairdist(pxy))
       wrs <- 1/wisot
     }
     
@@ -118,7 +134,6 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
     }
     
     #  correction=="border" or "modified border"
-    
     if(any(correction=="border")|any(correction=="modified.border")){
       bi <- bdist.points(pxy)
       for(i in 1:nds) { 
@@ -126,10 +141,10 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
         wbimod[,i] <- (bi>ds[i])/eroded.areas(bsw,ds[i])
       }
       wbi[is.na(wbi)] <- 0
+      wbimod[is.na(wbimod)] <- 0
     }
     
     # correction="setcovf"
-    
     if(correction=="setcovf"){
       for (i in 1:nds){
         wss[i] <- area-((pert*ds[i])/pi)
@@ -146,8 +161,7 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
                        as.double(mumr),(eImr),PACKAGE="msfstpp")
     
     eImr <- Imrout[[17]]/varmr
-    Imr0 <- 1
     
-    invisible(return(list(eImr=eImr,Imr0=Imr0,ds=ds,kernel=kernel,s.region=s.region,s.lambda=s.lambda)))
+    invisible(return(list(eImr=eImr,ds=ds,kernel=kernel,Imrtheo=Imrtheo,s.lambda=s.lambda)))
   }
 }

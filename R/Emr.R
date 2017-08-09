@@ -120,9 +120,8 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     wss <- rep(0,nds)
     
     # correction="isotropic"
-    
     if(correction=="isotropic"){
-      wisot <- edge.Ripley(pxy,pairdist(pts))
+      wisot <- edge.Ripley(pxy,pairdist(pxy))
       wrs <- 1/wisot
     }
     
@@ -133,7 +132,6 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     }
     
     #  correction=="border" or "modified border"
-    
     if(any(correction=="border")|any(correction=="modified.border")){
       bi <- bdist.points(pxy)
       for(i in 1:nds){ 
@@ -145,7 +143,6 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     }
     
     # correction="setcovf"
-    
     if(correction=="setcovf"){
       for (i in 1:nds){
         wss[i] <- area-((pert*ds[i])/pi)

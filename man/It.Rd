@@ -14,7 +14,7 @@ It(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplifi
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{t.region}{Vector containing the minimum and maximum values of the time interval.}
-  \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}.}
+  \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}. If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
   \item{dt}{A vector of times \code{v} at which \code{It(v)} is computed.}
   \item{kt}{A kernel function for the temporal distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{ht}{A bandwidth of the kernel function \code{kt}.}
@@ -29,12 +29,10 @@ It(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplifi
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{eImt}{A vector containing the values of \eqn{I(v)} estimated.}
-\item{Imt0}{A single value of \eqn{I(0)} estimated at \eqn{v=0}.}
 \item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{It(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
-\item{t.region}{If \code{t.region} is missing, the range of \code{xyt[,3]} is considered.}
-\item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
-}
+\item{Imttheo}{Value under the Poisson case is calculated considering the side lengths of the bounding box of \code{xyt[,1:2]}.}}
+
 %% ...
 \references{
 %% ~put references to the literature/web site here ~
@@ -69,19 +67,17 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the temporal Moran's I-statistics
-out <- It(hpp,ht=0.12/sqrt(100))
+out <- It(hpp)
 
 # R plot - Temporal Moran's I-statistics
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$eImt,out$kmt0),max(out$eImt,out$Imt0))
+yl <- c(min(out$eImt,out$Imttheo),max(out$eImt,out$Imttheo))
 plot(out$dt,out$eImt,type="l",xlab="t = time",ylab=expression(I(t)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$dt,rep(0,length(out$dt)),col=11)
-points(0,out$Imt0,col=3,pch=13,cex=1.5)
+lines(out$dt,rep(out$Imttheo,length(out$dt)),col=11)
 
 ## End(Not run)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
