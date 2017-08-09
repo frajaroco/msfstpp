@@ -38,38 +38,40 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
     warning(messnbd,call.=FALSE)
   }
   
-  if (missing(s.region)){
-    s.region <- sbox(xyt[, 1:2], xfrac = 0.01, yfrac = 0.01)
-  }
-  bsupt <- max(xyt[,3])
-  binft <- min(xyt[,3])
-  
-  pts <- xyt[,1:2]
-  xytimes <- xyt[,3]
-  ptsx <- pts[,1]
-  ptsy <- pts[,2]
-  ptst <- xytimes
-
   options(warn = -1) 
   
-  nedges <- length(s.region[,1])
-  s.region[,2] <- s.region[,2] - min(s.region[,2])
+  if (missing(s.region)) s.region <- sbox(xyt[,1:2], xfrac=0.01, yfrac=0.01)
+  
+  xp <- s.region[,1]
+  yp <- s.region[,2]
+  nedges <- length(xp)
+  yp <- yp - min(yp) 
   nxt <- c(2:nedges, 1)
-  dx <- s.region[,1][nxt] - s.region[,1]
-  ym <- (s.region[,2] + s.region[,2][nxt])/2
+  dx <- xp[nxt] - xp
+  ym <- (yp + yp[nxt])/2
   Areaxy <- -sum(dx * ym)
   
   if (Areaxy > 0){
-    bsw = owin(poly = list(x = s.region[,1], y = s.region[,2]))}
-  else
-    bsw = owin(poly = list(x = s.region[,1][length(s.region[,1]):1], y = s.region[,2][length(s.region[,1]):1]))
+    bsw <- owin(poly = list(x = s.region[,1], y = s.region[,2]))
+  }else{
+    bsw <- owin(poly = list(x = s.region[,1][length(s.region[,1]):1], y = s.region[,2][length(s.region[,1]):1]))
+  }
   
   area <- area(bsw)
   pert <- perimeter(bsw)
+  
+  ok <- inside.owin(xyt[,1],xyt[,2],w=bsw)
+  xyt.inside <- data.frame(x=xyt[,1][ok],y=xyt[,2][ok],t=xyt[,3][ok])
+  xyt.inside <- as.3dpoints(xyt.inside)
+  
+  ptsx <- xyt.inside[,1]
+  ptsy <- xyt.inside[,2]
+  ptst <- xyt.inside[,3]
+  
   pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
   
   if (missing(hs)){
-  hs <- bw.pcf(pxy)[1]
+    hs <- bw.stoyan(pxy)
   }
 
   if (missing(ds)){
@@ -80,6 +82,8 @@ Emr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appro
   }
   if(ds[1]==0){ds <- ds[-1]
   }
+  bsupt <- max(ptst)
+  binft <- min(ptst)
   
   kernel <- c(ks=ks,hs=hs)
   Emrtheo <- (bsupt-binft)/2
