@@ -80,12 +80,33 @@ Rodriguez-Cortes, F. J.(2015). \code{mvstpp}: Mark Variogram for Spatio-Temporal
 Xe <- stdcpp(lambp=20, a=0.12, b=0.09, c=0.07, mu=100)
 plot(Xe$xyt)
 
+# plot scatterplot3d
+par(mfrow=c(1,1))
+scatter3D(Xe$xyt[,1],Xe$xyt[,2],Xe$xyt[,3],theta=45,phi=30,
+main="Spatio-temporal point pattern",xlab="\n x",ylab="\n y",
+zlab="\n t",ticktype="detailed",col="black")
+
 # Balls
 Xb <- stdcpp(lambp=20, a=0.05, b=0.05, c=0.05, mu=100)
 plot(Xb$xyt)
 
-## End(Not run)
+# plot scatterplot3d
+par(mfrow=c(1,1))
+scatter3D(Xb$xyt[,1],Xb$xyt[,2],Xb$xyt[,3],theta=45,phi=30,
+main="Spatio-temporal point pattern",xlab="\n x",ylab="\n y",
+zlab="\n t",ticktype="detailed",col="black")
 
+X <- stdcpp(lambp=0.1, a=0.5,b=0.5,c=0.5, mu=50, 
+    s.region=matrix(c(10,10,0,0,0,10,10,0),ncol=2),t.region=c(0,10))
+plot(X$xyt,s.region=matrix(c(10,10,0,0,0,10,10,0),ncol=2))
+
+# plot scatterplot3d
+par(mfrow=c(1,1))
+scatter3D(X$xyt[,1],X$xyt[,2],X$xyt[,3],theta=-45,phi=30,
+main="Spatio-temporal point pattern",xlab="\n x",ylab="\n y",
+zlab="\n t",ticktype="detailed",col="black")
+
+## End(Not run)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

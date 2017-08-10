@@ -6,5 +6,6 @@ import(spatstat)
 import(KernSmooth)
 import(stpp)
 import(geoR)
+import(plot3D)
 
 importFrom("stats","dist","var","rpois","runif")
