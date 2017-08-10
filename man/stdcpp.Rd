@@ -96,9 +96,11 @@ scatter3D(Xb$xyt[,1],Xb$xyt[,2],Xb$xyt[,3],theta=45,phi=30,
 main="Spatio-temporal point pattern",xlab="\n x",ylab="\n y",
 zlab="\n t",ticktype="detailed",col="black")
 
-X <- stdcpp(lambp=0.1, a=0.5,b=0.5,c=0.5, mu=50, 
-    s.region=matrix(c(10,10,0,0,0,10,10,0),ncol=2),t.region=c(0,10))
-plot(X$xyt,s.region=matrix(c(10,10,0,0,0,10,10,0),ncol=2))
+# Northcumbria
+data(northcumbria)
+Northcumbria <- northcumbria/1000
+X <- stdcpp(lambp=0.00004, a=10,b=10,c=10, mu=120, s.region=Northcumbria, t.region=c(0,200))
+plot(X$xyt,s.region=Northcumbria)
 
 # plot scatterplot3d
 par(mfrow=c(1,1))
