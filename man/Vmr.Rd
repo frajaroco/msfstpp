@@ -1,7 +1,7 @@
 \name{Vmr}
 \alias{Vmr}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Spatial variance mark function
+\title{Spatial mark variance function
 %%  ~~function to do ... ~~
 }
 \description{Computes an estimator of the spatial variance mark function.
@@ -14,7 +14,7 @@ Vmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{s.region}{Two-column matrix specifying polygonal region containing all data locations. }
-  \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}.}
+  \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}. If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
   \item{ds}{A vector of distances \code{u} at which \code{Vmr(u)} is computed.}
   \item{ks}{A kernel function for the spatial distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{hs}{A bandwidth of the kernel function \code{ks}.}
@@ -29,12 +29,10 @@ Vmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{eVmr}{A vector containing the values of \eqn{V_[sp](u)} estimated.}
-\item{Vmr0}{A single value of \eqn{V_[sp](0)} estimated at \eqn{u=0}.}
 \item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \code{Vmr(u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
-\item{s.region}{If \code{s.region} is missing, the Ripley-Rasson estimate of the spatial domain is considered under the parameter \code{approach="standardised"}. The bounding box of \code{xyt[,1:2]} is considered under the parameter \code{approach="simplified"}.}
-\item{s.lambda}{If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
-}
+\item{vmrtheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}}
+
 %% ...
 \references{
 %% ~put references to the literature/web site here ~
@@ -69,17 +67,16 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the spatial variance mark function
-out <- Vmr(hpp,hs=0.12/sqrt(100))
+out <- Vmr(hpp)
 
 # R plot - Spatial variance mark function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(1/12,out$eVmr,out$Vmr0),max(1/12,out$eVmr,out$Vmr0))
+yl <- c(min(out$vmrtheo,out$eVmr),max(out$vmrtheo,out$eVmr))
 plot(out$ds,out$eVmr,type="l",xlab="r = distance",ylab=expression(V[sp](r)),
       xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$ds,rep(1/12,length(out$ds)),col=11)
-points(0,1/12,col=3,pch=13,cex=1.5)
-points(0,out$Vmr0,col=1,pch=19,cex=1.5)
+lines(out$ds,rep(out$vmrtheo,length(out$ds)),col=11)
+
 ## End(Not run)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

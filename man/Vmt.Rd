@@ -1,7 +1,7 @@
 \name{Vmt}
 \alias{Vmt}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Temporal variance mark function
+\title{Temporal mark variance function
 %%  ~~function to do ... ~~
 }
 \description{Computes an estimator of the temporal variance mark function.
@@ -14,7 +14,7 @@ Vmt(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplif
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{t.region}{Vector containing the minimum and maximum values of the time interval.}
-  \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}.}
+  \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}. If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
   \item{dt}{A vector of times \code{v} at which \code{Vmt(v)} is computed.}
   \item{kt}{A kernel function for the temporal distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{ht}{A bandwidth of the kernel function \code{kt}.}
@@ -29,12 +29,10 @@ Vmt(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplif
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{eVmt}{A vector containing the values of \eqn{V_[te](v)} estimated.}
-\item{Vmt0}{A single value of \eqn{V_[te](0)} estimated at \eqn{v=0}.}
 \item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{Vmt(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
-\item{t.region}{If \code{t.region} is missing, the range of \code{xyt[,3]} is considered.}
-\item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
-}
+\item{vmttheo}{Value under the Poisson case is calculated considering the side lengths of the bounding box of \code{xyt[,1:2]}.}}
+
 %% ...
 \references{
 %% ~put references to the literature/web site here ~
@@ -69,23 +67,16 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the temporal variance mark function
-out <- Vmt(hpp,ht=0.12/sqrt(100))
-
-# Temporal mark constant under homogeneous Poisson point processes
-a <- 1
-b <- 1
-eVt <- (1/6)*(a^2+b^2-(1/(150*(a*b)^4))*(2*(a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(a*b)^2+b^4))
-        +(5*a*b^4*log((a+sqrt(a^2+b^2))/b))+(5*a^4*b*log((b+sqrt(a^2+b^2))/a)))^2)
+out <- Vmt(hpp)
 
 # R plot - Temporal variance mark function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$eVmt,eVt,out$Vmt0),max(out$eVmt,eVt,out$Vmt0))
+yl <- c(min(out$eVmt,out$vmttheo),max(out$eVmt,out$vmttheo))
 plot(out$dt,out$eVmt,type="l",xlab="t = time",ylab=expression(V[te](t)),
       xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$dt,rep(eVt,length(out$dt)),col=11)
-points(0,eVt,col=3,pch=13,cex=1.5)
-points(0,out$Vmt0,col=1,pch=19,cex=1.5)
+lines(out$dt,rep(out$vmttheo,length(out$dt)),col=11)
+
 ## End(Not run)
 
 }

@@ -1,5 +1,7 @@
 Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
   
+  verifyclass(xyt,"stpp")
+  
   correc <- c("none","isotropic","border","modified.border","translate","setcovf")
   id <- match(correction,correc,nomatch=NA)
   if (any(nbg <- is.na(id))){
@@ -49,6 +51,9 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   
   bsupt <- max(t.region)
   binft <- min(t.region)
+  W <- sbox(xyt[,1:2], xfrac=0.01, yfrac=0.01)
+  a <- diff(range(W[,1]))
+  b <- diff(range(W[,2]))
   
   if (missing(dt)) {
     maxt <- (bsupt-binft)/4
@@ -59,6 +64,8 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   }
   
   kernel <- c(kt=kt,ht=ht)
+  vmttheo <- (1/6)*(a^2+b^2-(1/(150*(a*b)^4))*(2*(a^5+b^5-sqrt(a^2+b^2)*(a^4-3*(a*b)^2+b^4))
+             +(5*a*b^4*log((a+sqrt(a^2+b^2))/b))+(5*a^4*b*log((b+sqrt(a^2+b^2))/a)))^2)
   
   pts <- xyt[,1:2]
   xytimes <- xyt[,3]
@@ -78,9 +85,8 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
                        as.integer(ndt),as.integer(ker2),as.double(ht),as.double(emt),(eVmt),PACKAGE="msfstpp")
     
     eVmt <- Vmtout[[10]]
-    Vmt0 <- var(snorm)
     
-    invisible(return(list(eVmt=eVmt,Vmt0=Vmt0,dt=dt,kernel=kernel,t.region=t.region)))
+    invisible(return(list(eVmt=eVmt,dt=dt,kernel=kernel,vmttheo=vmttheo)))
   } else {
     
     if(missing(t.lambda)){
@@ -100,7 +106,6 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     wst <- rep(0,ndt)
     
     # correction="isotropic"
-    
     if(correction=="isotropic"){
       wist <- tedgeRipley(ptst,binft,bsupt)
       wrt <- 1/wist
@@ -113,7 +118,6 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     }
     
     #  correction=="border" or "modified border"
-    
     if(any(correction=="border")|any(correction=="modified.border")){
       bj = .bdist.times(xytimes, t.region)
       for(j in 1:ndt) { 
@@ -121,10 +125,10 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
         wbimodt[,j] <- (bj>dt[j])/.eroded.areat(t.region,dt[j])
       }
       wbit[is.na(wbit)] <- 0
+      wbimodt[is.na(wbimodt)] <- 0
     }
     
     # correction="setcovf"
-    
     if(correction=="setcovf"){
       wsett <- tsetcovf(dt,ndt,bsupt-binft)
       wst <- 1/wsett
@@ -137,8 +141,7 @@ Vmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
                        (eVmt),PACKAGE="msfstpp")
     
     eVmt <- Vmtout[[17]]
-    Vmt0 <- var(snorm)
     
-    invisible(return(list(eVmt=eVmt,Vmt0=Vmt0,dt=dt,kernel=kernel,t.region=t.region,t.lambda=t.lambda)))
+    invisible(return(list(eVmt=eVmt,dt=dt,kernel=kernel,vmttheo=vmttheo,t.lambda=t.lambda)))
   }
 }
