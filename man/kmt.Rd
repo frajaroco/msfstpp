@@ -12,7 +12,7 @@
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{t.region}{Vector containing the minimum and maximum values of the time interval.}
-  \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}.}
+  \item{t.lambda}{Vector of values of the temporal intensity function evaluated at the points \eqn{t} in \eqn{T}. If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
   \item{dt}{A vector of times \code{v} at which \code{kmt(v)} is computed.}
   \item{kt}{A kernel function for the temporal distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{ht}{A bandwidth of the kernel function \code{kt}.}
@@ -27,11 +27,9 @@
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{ekmt}{A vector containing the values of \eqn{k_[m.](v)} estimated.}
-\item{kmt0}{A single value of \eqn{k_[m.](0)} estimated at \eqn{v=0}.}
 \item{dt}{Parameter passed in argument. If \code{dt} is missing, a vector of temporal distances \code{v} at which \code{kmt(v)} is computed from 0 to until quarter of the maximum distance between the times in the temporal pattern.}
 \item{kernel}{Parameters passed in argument. A vector of names and bandwidth of the spatial kernel.}
-\item{t.region}{If \code{t.region} is missing, the range of \code{xyt[,3]} is considered.}
-\item{t.lambda}{If \code{t.lambda} is missing, the estimate of the temporal mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|T|} as an estimate of the temporal intensity under the parameter \code{approach="standardised"}.}
+\item{kmttheo}{Value under the Poisson case is calculated considering the side lengths of the bounding box of \code{xyt[,1:2]}.}
 }
 %% ...
 \references{
@@ -67,16 +65,15 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the temporal t-mark function
-out <- kmt(hpp,ht=0.12/sqrt(100))
+out <- kmt(hpp)
 
 # R plot - Temporal t-mark function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(1,out$ekmt,out$kmt0),max(1,out$ekmt,out$kmt0))
+yl <- c(min(out$ekmt,out$kmttheo),max(out$ekmt,out$kmttheo))
 plot(out$dt,out$ekmt,type="l",xlab="t = time",ylab=expression(k[m.](t)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$dt,rep(1,length(out$dt)),col=11)
-points(0,out$kmt0,col=3,pch=13,cex=1.5)
+lines(out$dt,rep(out$kmttheo,length(out$dt)),col=11)
 
 ## End(Not run)
 

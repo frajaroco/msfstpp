@@ -14,7 +14,7 @@ kmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 \arguments{
   \item{xyt}{Spatial coordinates and times \eqn{(x,y,t)} of the point pattern.}
   \item{s.region}{Two-column matrix specifying polygonal region containing all data locations. }
-  \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}.}
+  \item{s.lambda}{Vector of values of the spatial intensity function evaluated at the points \eqn{(x,y)} in \eqn{W}. If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
   \item{ds}{A vector of distances \code{u} at which \code{kmr(u)} is computed.}
   \item{ks}{A kernel function for the spatial distances. The default is the \code{"epanech"} kernel. It can also be \code{"box"} for the uniform kernel, or \code{"biweight"}.}
   \item{hs}{A bandwidth of the kernel function \code{ks}.}
@@ -29,12 +29,10 @@ kmr(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approach="simplif
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 \item{ekmr}{A vector containing the values of \eqn{k_[m.](u)} estimated.}
-\item{kmr0}{A single value of \eqn{k_[m.](0)} estimated at \eqn{u=0}.}
 \item{ds}{If \code{ds} is missing, a vector of distances \code{u} at which \code{kmr(u)} is computed from 0 to until quarter of the maximum distance between the points in the pattern.}
 \item{kernel}{A vector of names and bandwidth of the spatial kernel.}
-\item{s.region}{If \code{s.region} is missing, the Ripley-Rasson estimate of the spatial domain is considered under the parameter \code{approach="standardised"}. The bounding box of \code{xyt[,1:2]} is considered under the parameter \code{approach="simplified"}.}
-\item{s.lambda}{If \code{s.lambda} is missing, the estimate of the spatial mark correlation function is computed as for the homogeneous case, i.e. considering \eqn{n/|W|} as an estimate of the spatial intensity under the parameter \code{approach="standardised"}.}
-}
+\item{kmrtheo}{Value under the Poisson case is calculated considering \eqn{\tau}=\code{max(xyt[,3])-min(xyt[,3])}.}}
+
 %% ...
 \references{
 %% ~put references to the literature/web site here ~
@@ -69,19 +67,17 @@ hpp <- rpp(lambda = 100, replace = FALSE)$xyt
 plot(hpp)
 
 # This function provides an kernel estimator of the spatial r-mark function
-out <- kmr(hpp,hs=0.12/sqrt(100))
+out <- kmr(hpp)
 
 # R plot - Spatial r-mark function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(1,out$ekmr,out$kmr0),max(1,out$ekmr,out$kmr0))
+yl <- c(min(out$ekmr,out$kmrtheo),max(out$ekmr,out$kmrtheo))
 plot(out$ds,out$ekmr,type="l",xlab="r = distance",ylab=expression(k[m.](r)),
                  xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
-lines(out$ds,rep(1,length(out$ds)),col=11)
-points(0,out$kmr0,col=3,pch=13,cex=1.5)
+lines(out$ds,rep(out$kmrtheo,length(out$ds)),col=11)
 
 ## End(Not run)
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
