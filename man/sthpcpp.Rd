@@ -85,7 +85,7 @@ data(northcumbria)
 Northcumbria <- northcumbria/1000
 Xo <- sthpcpp(lambp=0.0035, r=5, mu=200, s.region=Northcumbria, 
                    t.region=c(28,198))
-plot(X$xyt,s.region=Northcumbria)
+plot(Xo$xyt,s.region=Northcumbria)
 
 # plot scatterplot3d
 par(mfrow=c(1,1))
