@@ -72,9 +72,8 @@ out <- kmmt(hpp)
 # R plot - Temporal mark correlation function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$ekmmt,out$kmmttheo),max(out$ekmmt,out$kmmttheo))
 plot(out$dt,out$ekmmt,type="l",xlab="t = time",ylab=expression(k[mm](t)),
-                 xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+                 xlim=xl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$dt,rep(out$kmmttheo,length(out$dt)),col=11)
 
 ## End(Not run)

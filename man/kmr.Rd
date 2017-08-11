@@ -72,9 +72,8 @@ out <- kmr(hpp)
 # R plot - Spatial r-mark function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$ekmr,out$kmrtheo),max(out$ekmr,out$kmrtheo))
 plot(out$ds,out$ekmr,type="l",xlab="r = distance",ylab=expression(k[m.](r)),
-                 xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+                 xlim=xl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$ds,rep(out$kmrtheo,length(out$ds)),col=11)
 
 ## End(Not run)

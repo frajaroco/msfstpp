@@ -72,10 +72,10 @@ out <- Emr(hpp)
 # R plot - Spatial mean mark function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$Emrtheo,out$eEmr),max(out$Emrtheo,out$eEmr))
 plot(out$ds,out$eEmr,type="l",xlab="r = distance",ylab=expression(E[sp](r)),
-          xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+          xlim=xl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$ds,rep(out$Emrtheo,length(out$ds)),col=11)
+
 ## End(Not run)
 
 }

@@ -72,9 +72,8 @@ out <- Vmt(hpp)
 # R plot - Temporal variance mark function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$eVmt,out$vmttheo),max(out$eVmt,out$vmttheo))
 plot(out$dt,out$eVmt,type="l",xlab="t = time",ylab=expression(V[te](t)),
-      xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+      xlim=xl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$dt,rep(out$vmttheo,length(out$dt)),col=11)
 
 ## End(Not run)

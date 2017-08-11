@@ -72,9 +72,8 @@ out <- It(hpp)
 # R plot - Temporal Moran's I-statistics
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$eImt,out$Imttheo),max(out$eImt,out$Imttheo))
 plot(out$dt,out$eImt,type="l",xlab="t = time",ylab=expression(I(t)),
-                 xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+                 xlim=xl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$dt,rep(out$Imttheo,length(out$dt)),col=11)
 
 ## End(Not run)

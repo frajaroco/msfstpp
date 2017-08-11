@@ -72,9 +72,8 @@ out <- Ir(hpp)
 # R plot - Spatial Moran's I-statistics
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$Imrtheo,out$eImr),max(1,out$eIr))
 plot(out$ds,out$eImr,type="l",xlab="r = distance",ylab=expression(I(r)),
-                 xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+                 xlim=xl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$ds,rep(out$Imrtheo,length(out$ds)),col=11)
 
 ## End(Not run)

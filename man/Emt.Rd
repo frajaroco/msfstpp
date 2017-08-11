@@ -69,10 +69,10 @@ out <- Emt(hpp)
 # R plot - Temporal mean mark function
 par(mfrow=c(1,1))
 xl <- c(0,0.25)
-yl <- c(min(out$eEmt,out$Emttheo),max(out$eEmt,out$Emttheo))
 plot(out$dt,out$eEmt,type="l",xlab="t = time",ylab=expression(E[te](t)),
-     xlim=xl,ylim=yl,col=1,cex.lab=1.5,cex.axis=1.5)
+     xlim=xl,col=1,cex.lab=1.5,cex.axis=1.5)
 lines(out$dt,rep(out$Emttheo,length(out$dt)),col=11)
+
 ## End(Not run)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
