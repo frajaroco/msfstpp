@@ -70,22 +70,28 @@ Rodriguez-Cortes, F. J.(2015). \code{mvstpp}: Mark Variogram for Spatio-Temporal
 \examples{
 ## Not run:
 #################
+require(plot3D)
 
 X <- sthpcpp(lambp=20, r=0.05, mu=100)
 plot(X$xyt)
 
 par(mfrow=c(1,1))
-scatter3D(X$xyt[,1],X$xyt[,2],X$xyt[,3],theta=45,phi=30, main="Spatio-temporal point pattern",xlab="\n x",ylab="\n y",zlab="\n t",ticktype="detailed",col="black")
+scatter3D(X$xyt[,1],X$xyt[,2],X$xyt[,3],theta=45,phi=30,
+main="Spatio-temporal point pattern",xlab="\n x",ylab="\n y",
+zlab="\n t",ticktype="detailed",col="black")
 
 ## Spatio-temporal hot-spots cluster point process model
 data(northcumbria)
 Northcumbria <- northcumbria/1000
-Xo <- sthpcpp(lambp=0.0035, r=5, mu=200, s.region=Northcumbria, t.region=c(28,198))
+Xo <- sthpcpp(lambp=0.0035, r=5, mu=200, s.region=Northcumbria, 
+                   t.region=c(28,198))
 plot(X$xyt,s.region=Northcumbria)
 
 # plot scatterplot3d
 par(mfrow=c(1,1))
-scatter3D(Xo$xyt[,1],Xo$xyt[,2],Xo$xyt[,3],theta=45,phi=30, main="Spatio-temporal point pattern",xlab="\n x",ylab="\n y",zlab="\n t",ticktype="detailed",col="black")
+scatter3D(Xo$xyt[,1],Xo$xyt[,2],Xo$xyt[,3],theta=45,phi=30,
+main="Spatio-temporal point pattern",xlab="\n x",ylab="\n y",
+zlab="\n t",ticktype="detailed",col="black")
 
 ## End(Not run)
 }

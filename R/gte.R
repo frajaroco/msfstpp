@@ -38,20 +38,22 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
     warning(messnbd,call.=FALSE)
   }
   
-  if (missing(ht)){
-    d <- dist(xyt[,3])
-    ht <- dpik(d,kernel=kt,range.x=c(min(d),max(d)))
-  }
-  
   if (missing(t.region)){
     tr <- range(xyt[,3],na.rm=TRUE)
     tw <- diff(tr)
     t.region <- c(tr[1]-0.01*tw,tr[2]+0.01*tw)
   }
   
+  xyt.inside <- intim(xyt,t.region)
+
+  if (missing(ht)){
+    d <- dist(xyt.inside[,3])
+    ht <- dpik(d,kernel=kt,range.x=c(min(d),max(d)))
+  }
+  
   bsupt <- max(t.region)
   binft <- min(t.region)
-  W <- sbox(xyt[,1:2], xfrac=0.01, yfrac=0.01)
+  W <- sbox(xyt.inside[,1:2], xfrac=0.01, yfrac=0.01)
   a <- diff(range(W[,1]))
   b <- diff(range(W[,2]))
   
@@ -66,8 +68,8 @@ gte <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
   kernel <- c(kt=kt,ht=ht)
   gtetheo <- ((a^2)+(b^2))/12
   
-  pts <- xyt[,1:2]
-  xytimes <- xyt[,3]
+  pts <- xyt.inside[,1:2]
+  xytimes <- xyt.inside[,3]
   ptsx <- pts[,1]
   ptsy <- pts[,2]
   ptst <- xytimes

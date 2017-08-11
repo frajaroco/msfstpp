@@ -73,7 +73,10 @@ intim <- function(xyt,t.region){
   int <- NULL
   for(i in 1:length(xyt[,1])){
     if (xyt[i,3] > t.region[1] & xyt[i,3] < t.region[2]){
-      int <- rbind(int,xyt[i,])}}
+      int <- rbind(int,xyt[i,])}
+   }
+  
+  int <- as.3dpoints(int)
 
   invisible(return(int))
 }

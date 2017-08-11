@@ -75,6 +75,7 @@ Rodriguez-Cortes, F. J.(2015). \code{mvstpp}: Mark Variogram for Spatio-Temporal
 \examples{
 ## Not run:
 #################
+require(plot3D)
 
 # Ellipsoid
 Xe <- stdcpp(lambp=20, a=0.12, b=0.09, c=0.07, mu=100)
