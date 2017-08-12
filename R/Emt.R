@@ -86,9 +86,8 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
                        as.integer(ndt),as.integer(ker2),as.double(ht),(eEmt),PACKAGE="msfstpp")
     
     eEmt <- Emtout[[9]]
-    Emt0 <- mean(snorm)
 
-    invisible(return(list(eEmt=eEmt,Emt0=Emt0,dt=dt,kernel=kernel,Emttheo=Emttheo)))
+    invisible(return(list(eEmt=eEmt,dt=dt,kernel=kernel,Emttheo=Emttheo)))
   } else {
     
     if(missing(t.lambda)){
@@ -143,8 +142,7 @@ Emt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appro
                        PACKAGE="msfstpp")
     
     eEmt <- Emtout[[16]]
-    Emt0 <- mean(snorm)
     
-    invisible(return(list(eEmt=eEmt,Emt0=Emt0,dt=dt,kernel=kernel,Emttheo=Emttheo)))
+    invisible(return(list(eEmt=eEmt,dt=dt,kernel=kernel,Emttheo=Emttheo)))
   }
 }
