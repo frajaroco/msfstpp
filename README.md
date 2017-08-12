@@ -13,7 +13,7 @@ and thereafter run the commands:
 require(remotes)
 install_github('frajaroco/msfstpp')
 ```
-**warning:** If you have problems to load the repository. It is  is necessary to load the additional *R* package `plot3D` in order to plot the outputs of some functions.
+**warning:** If you have problems to load the repository. It is  is necessary to load the additional **R** package `plot3D` in order to plot the outputs of some functions.
 
 ## References
 - Ballani, F., Rodríguez-Cortés, F. J., Mateu, J. and Stoyan, D. (2017). Mark-based second-order characteristics in the statistics for spatio-temporal point processes.
