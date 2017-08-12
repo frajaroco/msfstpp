@@ -6,19 +6,14 @@ Basic toolkit for the exploration and analysis of the spatio-temporal point patt
 
 The easiest way to install the development version of msfstpp from github is using the devtools package which can be installed run the next command:
 ```
-install.packages('devtools', dependencies=TRUE)
+install.packages('remotes')
 ```
 and thereafter run the commands:
 ```
-require(devtools)
-devtools::install_github('frajaroco/msfstpp')
+require(remotes)
+install_github('frajaroco/msfstpp')
 ```
-**warning:** If you have problems to load the repository. It is recommended load the package `geoR` before to load the `msftpp` repository. Also, it is necessary to load additional packages for plot the outputs as the package `plot3D`, please consider the follow order:
-```
-require(geoR)
-require(plot3D)
-library(mvstpp)
-```
+**warning:** If you have problems to load the repository. It is  is necessary to load the additional *R* package`plot3D` in order to plot the outputs of some functions.
 
 ## References
 - Ballani, F., Rodríguez-Cortés, F. J., Mateu, J. and Stoyan, D. (2017). Mark-based second-order characteristics in the statistics for spatio-temporal point processes.
