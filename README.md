@@ -13,7 +13,7 @@ and thereafter run the commands:
 require(devtools)
 devtools::install_github('frajaroco/msfstpp')
 ```
-**warning:** If you have problems to load the repository. It is recommended to load the package `geoR` before load the `msftpp` repository. Also, it is necessary to load additional packages as `plot3D` as follow
+**warning:** If you have problems to load the repository. It is recommended load the package `geoR` before to load the `msftpp` repository. Also, it is necessary to load additional packages for plot the outputs as the package `plot3D`, please consider the follow order:
 ```
 require(geoR)
 require(plot3D)
