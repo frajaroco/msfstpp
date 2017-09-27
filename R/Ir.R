@@ -79,8 +79,7 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
     ds <- seq(hs, maxd,len=100)[-1]
     ds <- sort(ds)
   }
-  if(ds[1]==0){ds <- ds[-1]
-  }
+  
   bsupt <- max(ptst)
   binft <- min(ptst)
   
