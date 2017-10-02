@@ -79,9 +79,8 @@ Ir <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",approa
     ds <- seq(hs, maxd,len=100)[-1]
     ds <- sort(ds)
   }
-  
-  bsupt <- max(ptst)
-  binft <- min(ptst)
+  if(ds[1]==0){ds <- ds[-1]
+  }
   
   kernel <- c(ks=ks,hs=hs)
   Imrtheo <- 0
