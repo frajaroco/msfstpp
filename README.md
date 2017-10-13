@@ -4,7 +4,7 @@ Basic toolkit for the exploration and analysis of the spatio-temporal point patt
 
 ## Installation guide
 
-The easiest way to install the development version of `msfstpp` from GitHub is using the devtools package which can be installed run the next command:
+The easiest way to install the development version of `msfstpp` from GitHub is using the remotes package which can be installed run the next command:
 ```
 install.packages('remotes')
 ```
