@@ -69,8 +69,16 @@ kmmr <- function(xyt,s.region,s.lambda,ds,ks="epanech",hs,correction="none",appr
   
   pxy <- ppp(x=ptsx,y=ptsy,window=bsw)  
   
+ # if (missing(hs)){
+ #   hs <- bw.stoyan(pxy)
+ # }
+
+  frac = 1
+  
   if (missing(hs)){
-    hs <- bw.stoyan(pxy)
+    ppxy <- cbind(ptsx,ptsy)
+    d = dist(ppxy)
+    hs = dpik(d, kernel = ks, range.x = c(min(d), max(d)/frac))
   }
   
   if (missing(ds)){
