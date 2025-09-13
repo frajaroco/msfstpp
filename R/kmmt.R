@@ -1,4 +1,4 @@
-kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
+kmmt <- function(xyt,s.region,t.region,t.lambda,dt,kt="epanech",ht,correction="none",approach="simplified"){
   
   verifyclass(xyt,"stpp")
   
@@ -37,6 +37,8 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
     messnbd <- paste("spatio-temporal data contain duplicated points")
     warning(messnbd,call.=FALSE)
   }
+
+  if (missing(s.region)) s.region <- sbox(xyt[,1:2], xfrac=0.01, yfrac=0.01)
   
   if (missing(t.region)){
     tr <- range(xyt[,3],na.rm=TRUE)
@@ -67,22 +69,22 @@ kmmt <- function(xyt,t.region,t.lambda,dt,kt="epanech",ht,correction="none",appr
   
   pts <- xyt.inside[,1:2]
   xytimes <- xyt.inside[,3]
-  ptsx <- pts[,1]
-  ptsy <- pts[,2]
+  ptsxy <- pts[,1:2]
   ptst <- xytimes
   npt <- length(ptsx)
   ndt <- length(dt)
-  snorm <- apply(pts,MARGIN=1,FUN=norm,type="2")
-  mummt <- mean(snorm)
+  win <- owin(poly=list(x=s.region[,1],y=s.region[,2]))
+  xw <- as.matrix(as.numeric(centroid.owin(win)))
+  nxw <- (norm(xw, type="2"))^2
   ekmmt <- rep(0,ndt)
   
   storage.mode(ekmmt) <- "double"
   
   if (appro2[1]==1){
-    kmmtout <- .Fortran("kmmtcore",as.double(snorm),as.double(ptst),as.integer(npt),as.double(dt),
-                        as.integer(ndt),as.integer(ker2),as.double(ht),(ekmmt),PACKAGE="msfstpp")
+    kmmtout <- .Fortran("kmmtcore",as.double(ptsxy),as.double(ptst),as.integer(npt),as.double(dt),
+                        as.integer(ndt),as.integer(ker2),as.double(ht),as.double(nxw),(ekmmt),PACKAGE="msfstpp")
     
-    ekmmt <- kmmtout[[8]]/(mummt^2)
+    ekmmt <- kmmtout[[8]]
     
     invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,kmmttheo=kmmttheo)))
   } else {
