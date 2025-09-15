@@ -67,11 +67,9 @@ kmmt <- function(xyt,s.region,t.region,t.lambda,dt,kt="epanech",ht,correction="n
   kernel <- c(kt=kt,ht=ht)
   kmmttheo <- 1
   
-  pts <- xyt.inside[,1:2]
-  xytimes <- xyt.inside[,3]
-  ptsxy <- pts[,1:2]
-  ptst <- xytimes
-  npt <- length(ptsx)
+  ptsxy <- xyt.inside[,1:2]
+  ptst <- xyt.inside[,3]
+  npt <- length(ptsxy[,1])
   ndt <- length(dt)
   win <- owin(poly=list(x=s.region[,1],y=s.region[,2]))
   xw <- as.matrix(as.numeric(centroid.owin(win)))
@@ -84,7 +82,7 @@ kmmt <- function(xyt,s.region,t.region,t.lambda,dt,kt="epanech",ht,correction="n
     kmmtout <- .Fortran("kmmtcore",as.double(ptsxy),as.double(ptst),as.integer(npt),as.double(dt),
                         as.integer(ndt),as.integer(ker2),as.double(ht),as.double(nxw),(ekmmt),PACKAGE="msfstpp")
     
-    ekmmt <- kmmtout[[8]]
+    ekmmt <- kmmtout[[9]]
     
     invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,kmmttheo=kmmttheo)))
   } else {
