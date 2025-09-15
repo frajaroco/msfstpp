@@ -3,9 +3,10 @@ C
 C     This code provides a non-parametric kernel based estimator of the
 C     temporal t-mark function.
 C
-subroutine kmtcore(snorm,txy,n,t,nt,kt,ht,kmt)
 
-       implicit real*8(a-h,o-z)
+       subroutine kmtcore(snorm,txy,n,t,nt,kt,ht,kmt)
+
+       implicit double precision (a-h,o-z)
 
        integer i,j,iv,n,nt,kt
        double precision wij,vij,ht,kernt,ktm,ktn,kmt,snorm,txy
@@ -29,7 +30,7 @@ subroutine kmtcore(snorm,txy,n,t,nt,kt,ht,kmt)
                  kernt=ekernel((t(iv)-tij)/ht,ht)
                   else if (kt(3).eq.1) then
                    kernt=qkernel((t(iv)-tij)/ht,ht)
-end if
+              end if
              if (kernt.ne.0d0) then
                     wij=mij*kernt
                     vij=kernt
@@ -43,4 +44,5 @@ end if
           end do
 
         return
- end
+
+        end

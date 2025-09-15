@@ -5,5 +5,7 @@ exportPattern("^[^\\.]")
 import(spatstat)
 import(geoR)
 import(stpp)
+import(KernSmooth)
+import(splancs)
 
 importFrom("stats","dist","var","rpois","runif")
