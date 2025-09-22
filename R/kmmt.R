@@ -58,7 +58,7 @@ kmmt <- function(xyt,s.region,t.region,t.lambda,dt,kt="epanech",ht,correction="n
   
   if (missing(dt)) {
    maxt <- (bsupt-binft)/4
-   dt <- seq(ht,maxt,len=100)#[-1]
+   dt <- seq(0,maxt,len=100)#[-1]ht
   }
  # if(dt[1]==0){
  #  dt <- dt[-1]
