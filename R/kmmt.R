@@ -74,7 +74,7 @@ kmmt <- function(xyt,s.region,t.region,t.lambda,dt,kt="epanech",ht,correction="n
   win <- owin(poly=list(x=s.region[,1],y=s.region[,2]))
   xw <- as.matrix(as.numeric(centroid.owin(win)))
   nxw <- (norm(xw, type="2"))^2
-  snorm <- apply(ptsxy,MARGIN=1,FUN=norm,type="2")
+  #snorm <- apply(ptsxy,MARGIN=1,FUN=norm,type="2")
   ekmmt <- rep(0,ndt)
   
   storage.mode(ekmmt) <- "double"
@@ -83,7 +83,7 @@ kmmt <- function(xyt,s.region,t.region,t.lambda,dt,kt="epanech",ht,correction="n
     kmmtout <- .Fortran("kmmtcore",as.double(ptsxy),as.double(ptst),as.integer(npt),as.double(dt),
                         as.integer(ndt),as.integer(ker2),as.double(ht),as.double(nxw),(ekmmt),PACKAGE="msfstpp")
     
-    ekmmt <- kmmtout[[9]]/(mean(snorm)^2)
+    ekmmt <- kmmtout[[9]]#/(mean(snorm)^2)
     
     invisible(return(list(ekmmt=ekmmt,dt=dt,kernel=kernel,kmmttheo=kmmttheo)))
   } else {
