@@ -57,12 +57,12 @@ kmmt <- function(xyt,s.region,t.region,t.lambda,dt,kt="epanech",ht,correction="n
   binft <- min(t.region)
   
   if (missing(dt)) {
-    maxt <- (bsupt-binft)/4
-    dt <- seq(ht,maxt,len=100)[-1]
+   maxt <- (bsupt-binft)/4
+   dt <- seq(ht,maxt,len=100)#[-1]
   }
-  if(dt[1]==0){
-    dt <- dt[-1]
-  }
+ # if(dt[1]==0){
+ #  dt <- dt[-1]
+ #}
   
   kernel <- c(kt=kt,ht=ht)
   kmmttheo <- 1
